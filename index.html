@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ── SEO ─────────────────────────────────────────── -->
+  <title>Wiris Viana — Creator & Media</title>
+  <meta name="description" content="Wiris Viana é um criador de conteúdo com mais de 136 mil seguidores e 41 milhões de visualizações mensais. Conheça os formatos de publicidade e parcerias comerciais disponíveis para marcas.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://wirisviana.com/">
+
+  <!-- ── OPEN GRAPH ────────────────────────────────────── -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Wiris Viana — Creator & Media">
+  <meta property="og:description" content="Uma audiência real. Uma produção de verdade. Sua marca no centro disso.">
+  <meta property="og:url" content="https://wirisviana.com/">
+  <!-- <meta property="og:image" content="https://wirisviana.com/assets/images/og-image.jpg"> -->
+
+  <!-- ── TWITTER CARD ──────────────────────────────────── -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Wiris Viana — Creator & Media">
+  <meta name="twitter:description" content="Uma audiência real. Uma produção de verdade. Sua marca no centro disso.">
+
+  <!-- ── FONTS ─────────────────────────────────────────── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- ── STYLES ────────────────────────────────────────── -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/refinements.css">
+
+  <!-- ── CHART.JS (CDN) ───────────────────────────────── -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- ── THEME SCRIPT (prevent flash) ─────────────────── -->
+  <script>
+    (function() {
+      var theme = localStorage.getItem('wv-theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+</head>
+
+<body>
+
+  <!-- Scroll progress -->
+  <div id="scroll-progress" aria-hidden="true" role="progressbar" aria-label="Progresso de leitura"></div>
+
+  <!-- Live ticker -->
+  <div id="live-ticker" aria-hidden="true" role="marquee">
+    <div class="ticker-track" id="ticker-track"></div>
+  </div>
+
+  <!-- Skip to main -->
+  <a href="#main-content" id="skip-main" class="sr-only" style="position:fixed;top:-100%;left:1rem;z-index:9999;background:var(--accent);color:#fff;padding:0.5rem 1rem;border-radius:4px;font-weight:600;transition:top 0.2s" onFocus="this.style.top='0.5rem'" onBlur="this.style.top='-100%'">Ir para o conteúdo</a>
+
+  <!-- ══════════════════════════════════════════════════════
+       NAVBAR
+  ══════════════════════════════════════════════════════ -->
+  <header role="banner">
+    <nav id="navbar" aria-label="Navegação principal">
+      <div class="nav-inner">
+
+        <!-- Logo -->
+        <a href="#hero" class="nav-logo" aria-label="Wiris Viana — Página inicial">
+          <span class="nav-logo-name">Wiris Viana</span>
+          <span class="nav-logo-sub">Creator & Media</span>
+        </a>
+
+        <!-- Desktop links (preenchidos via JS) -->
+        <div class="nav-links" id="nav-links" role="list"></div>
+
+        <!-- Right actions -->
+        <div class="nav-right">
+          <button
+            id="theme-toggle"
+            class="theme-toggle"
+            aria-label="Alternar tema escuro/claro"
+            title="Alternar tema"
+          >
+            <!-- Moon (shown in dark mode) -->
+            <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <!-- Sun (shown in light mode) -->
+            <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+          </button>
+
+          <a href="#contato" class="btn btn-primary" aria-label="Quero anunciar com Wiris Viana">
+            Quero Anunciar
+          </a>
+
+          <!-- Mobile toggle -->
+          <button
+            id="nav-mobile-toggle"
+            class="nav-mobile-toggle"
+            aria-label="Abrir menu"
+            aria-expanded="false"
+            aria-controls="nav-mobile-menu"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <line x1="3" y1="12" x2="21" y2="12"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Mobile Menu (links preenchidos via JS) -->
+      <nav id="nav-mobile-menu" class="nav-mobile-menu" aria-label="Menu mobile"></nav>
+    </nav>
+  </header>
+
+  <main id="main-content">
+
+    <!-- ══════════════════════════════════════════════════
+         HERO
+    ══════════════════════════════════════════════════ -->
+    <section id="hero" aria-label="Apresentação">
+      <div class="hero-bg-grid" aria-hidden="true"></div>
+      <div class="hero-bg-radial" aria-hidden="true"></div>
+
+      <div class="hero-inner">
+
+        <!-- Left: Content -->
+        <div class="hero-content">
+
+          <!-- Badge -->
+          <div class="hero-badge" aria-label="Parceiro para marcas">
+            <span class="dot" aria-hidden="true"></span>
+            Disponível para Parcerias
+          </div>
+
+          <!-- Title -->
+          <div class="hero-title">
+            <h1 class="hero-title-name">Wiris<br>Viana</h1>
+            <p class="hero-title-sub">
+              Conteúdo que transforma<br>audiência em atenção para marcas.
+            </p>
+          </div>
+
+          <!-- Mini Stats (preenchidas via JS) -->
+          <div class="hero-mini-stats" id="hero-mini-stats" aria-label="Métricas principais">
+          </div>
+
+          <!-- CTA -->
+          <div class="hero-actions">
+            <a href="#contato" class="btn btn-primary btn-lg" aria-label="Quero anunciar com Wiris Viana">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+              Quero Anunciar
+            </a>
+            <a href="#audiencia" class="btn btn-secondary btn-lg">
+              Ver a Audiência
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Right: Photo -->
+        <div class="hero-image-wrap" aria-hidden="true">
+          <div class="hero-image-bg">
+            <!-- Substituir src pela foto real do Wiris -->
+            <div class="hero-photo-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <circle cx="12" cy="8" r="5"/>
+                <path d="M3 22c0-6.08 4.03-11 9-11s9 4.92 9 11"/>
+              </svg>
+              <p>Foto principal do Wiris</p>
+            </div>
+            <!-- <img src="assets/images/wiris-hero.jpg" alt="Wiris Viana" class="hero-photo"> -->
+          </div>
+
+          <!-- Float cards -->
+          <div class="hero-float-card hero-float-1">
+            <div class="hero-float-card-icon" style="background:rgba(255,0,80,0.12);color:#FF0050;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.95a8.28 8.28 0 0 0 4.84 1.54V7.07a4.85 4.85 0 0 1-1.07-.38z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="hero-float-card-value" data-counter data-target="78421" data-suffix="">0</div>
+              <div class="hero-float-card-label">TikTok Seguidores</div>
+            </div>
+          </div>
+
+          <div class="hero-float-card hero-float-2">
+            <div class="hero-float-card-icon" style="background:rgba(255,0,0,0.12);color:#FF0000;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="hero-float-card-value" data-counter data-target="12800" data-suffix="">0</div>
+              <div class="hero-float-card-label">YouTube Inscritos</div>
+            </div>
+          </div>
+
+          <div class="hero-float-card hero-float-3">
+            <div class="hero-float-card-icon" style="background:rgba(225,48,108,0.12);color:#E1306C;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <rect x="2" y="2" width="20" height="20" rx="5"/>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+              </svg>
+            </div>
+            <div>
+              <div class="hero-float-card-value" data-counter data-target="45200" data-suffix="">0</div>
+              <div class="hero-float-card-label">Instagram Seguidores</div>
+            </div>
+          </div>
+
+        </div><!-- /hero-image-wrap -->
+
+      </div><!-- /hero-inner -->
+
+      <!-- Scroll indicator -->
+      <div class="hero-scroll-indicator" aria-hidden="true">
+        <div class="hero-scroll-line"></div>
+        <span>Scroll</span>
+      </div>
+
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         STATS
+    ══════════════════════════════════════════════════ -->
+    <section id="stats" aria-label="Métricas de audiência">
+      <div class="container">
+        <div class="stats-grid" id="stats-grid" role="list">
+          <!-- preenchido via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         PLATFORMS
+    ══════════════════════════════════════════════════ -->
+    <section id="plataformas" class="section" aria-label="Presença digital por plataforma">
+      <div class="container">
+        <header class="section-header">
+          <div class="label-eyebrow reveal">Presença Digital</div>
+          <h2 class="display-md reveal reveal-delay-1">
+            Uma audiência construída<br>em múltiplas plataformas.
+          </h2>
+          <p class="reveal reveal-delay-2">
+            Conteúdo distribuído estrategicamente onde a audiência está — com formatos nativos e linguagem própria em cada plataforma.
+          </p>
+        </header>
+
+        <div class="platforms-grid" id="platforms-grid" role="list">
+          <!-- preenchido via JS -->
+        </div>
+
+        <!-- Platform bar comparison -->
+        <div style="margin-top:3rem;padding:2rem 2.5rem;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);">
+          <div class="label-eyebrow reveal" style="margin-bottom:1.25rem">Distribuição de Seguidores</div>
+          <div class="platform-bar-wrap" id="platform-bars">
+            <!-- preenchido via JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         GROWTH CHART
+    ══════════════════════════════════════════════════ -->
+    <section id="crescimento" aria-label="Crescimento de audiência">
+      <div class="container">
+        <header class="section-header reveal">
+          <div class="label-eyebrow">Crescimento</div>
+          <h2 class="display-md reveal-delay-1">Trajetória em ascensão.</h2>
+        </header>
+
+        <div class="chart-wrap reveal reveal-delay-2">
+          <div class="chart-header">
+            <div>
+              <div class="chart-title">Crescimento de Visualizações</div>
+              <div class="chart-subtitle">Últimos 6 meses — todas as plataformas</div>
+            </div>
+            <div class="chart-legend" id="chart-legend" aria-label="Legenda do gráfico">
+              <!-- preenchido via JS -->
+            </div>
+          </div>
+
+          <div class="chart-canvas-wrap">
+            <canvas id="growth-chart" aria-label="Gráfico de crescimento de visualizações" role="img"></canvas>
+          </div>
+
+          <p class="chart-disclaimer">
+            * Dados representativos do crescimento da audiência. Valores são aproximações mensais.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         AUDIENCE
+    ══════════════════════════════════════════════════ -->
+    <section id="audiencia" class="section" aria-label="Perfil da audiência">
+      <div class="container">
+        <div class="audience-grid">
+
+          <!-- Left: Context -->
+          <div class="audience-content">
+            <div class="label-eyebrow reveal">A Audiência</div>
+            <h2 class="display-md reveal reveal-delay-1">
+              Pessoas reais.<br>Atenção genuína.
+            </h2>
+            <p class="reveal reveal-delay-2">
+              Por trás dos números existe uma comunidade engajada que acompanha o universo de Wiris ativamente, interage com o conteúdo e responde às recomendações de marcas com alto índice de conversão.
+            </p>
+
+            <!-- Interests -->
+            <div>
+              <div class="label-eyebrow reveal reveal-delay-3" style="margin-bottom:1rem">Interesses da Audiência</div>
+              <div class="audience-interests" id="audience-interests" aria-label="Interesses da audiência">
+                <!-- preenchido via JS -->
+              </div>
+            </div>
+
+            <!-- Placeholder note -->
+            <div class="audience-placeholder-note reveal reveal-delay-4">
+              📊 Dados demográficos detalhados disponíveis mediante solicitação comercial.
+            </div>
+          </div>
+
+          <!-- Right: Stats grid -->
+          <div class="audience-stats-grid reveal-right reveal-delay-2" aria-label="Números da audiência">
+
+            <div class="audience-stat-cell">
+              <div class="audience-stat-value">
+                <span data-counter data-target="136421" data-suffix="+">0+</span>
+              </div>
+              <div class="audience-stat-label">Seguidores Totais</div>
+              <div class="audience-stat-note">Todas as plataformas</div>
+            </div>
+
+            <div class="audience-stat-cell">
+              <div class="audience-stat-value">
+                <span data-counter data-target="41" data-suffix="M+">0</span>
+              </div>
+              <div class="audience-stat-label">Views por Mês</div>
+              <div class="audience-stat-note">Média dos últimos 3 meses</div>
+            </div>
+
+            <div class="audience-stat-cell">
+              <div class="audience-stat-value" style="color:var(--accent)">
+                <span data-counter data-target="8.7" data-suffix="%">0%</span>
+              </div>
+              <div class="audience-stat-label">Taxa de Engajamento</div>
+              <div class="audience-stat-note">Acima da média do nicho</div>
+            </div>
+
+            <div class="audience-stat-cell">
+              <div class="audience-stat-value">
+                <span data-counter data-target="9.2" data-suffix="M+">0</span>
+              </div>
+              <div class="audience-stat-label">Alcance Mensal</div>
+              <div class="audience-stat-note">Contas únicas impactadas</div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         CONTENT SHOWCASE
+    ══════════════════════════════════════════════════ -->
+    <section id="conteudo" aria-label="Universo de conteúdo">
+      <div class="container" style="padding-top:6rem;padding-bottom:6rem">
+        <header class="section-header">
+          <div class="label-eyebrow reveal">O Conteúdo</div>
+          <h2 class="display-md reveal reveal-delay-1">
+            Produção, não apenas postagem.
+          </h2>
+          <p class="reveal reveal-delay-2">
+            Web-novelas, séries, personagens e narrativas que constroem comunidade e geram atenção de forma consistente — um universo de entretenimento de verdade.
+          </p>
+        </header>
+
+        <div class="content-grid" id="content-grid" role="list">
+          <!-- preenchido via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         BEHIND THE SCENES
+    ══════════════════════════════════════════════════ -->
+    <section id="bastidores" aria-label="Por trás das câmeras">
+      <div class="bts-image-wrap">
+        <!-- Substituir src pela foto de bastidores -->
+        <div class="bts-placeholder" role="img" aria-label="Foto de bastidores da produção de Wiris Viana">
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.75" opacity="0.2" aria-hidden="true">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+          <p style="font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted)">Foto de bastidores em breve</p>
+        </div>
+        <!-- <img src="assets/images/wiris-bastidores.jpg" alt="Equipe de produção de Wiris Viana nos bastidores" class="bts-image"> -->
+
+        <div class="bts-overlay" aria-hidden="true"></div>
+
+        <div class="bts-content">
+          <div class="bts-text">
+            <div class="label-eyebrow reveal">Por Trás das Câmeras</div>
+            <h2 class="display-md reveal reveal-delay-1">
+              Existe uma produção<br>real por trás disso.
+            </h2>
+            <p class="reveal reveal-delay-2">
+              O universo de Wiris Viana é construído com equipe, planejamento, direção e pós-produção. Cada conteúdo é uma produção audiovisual completa — não um vídeo amador gravado com celular.
+            </p>
+
+            <div class="bts-features reveal reveal-delay-3">
+              <div class="bts-feature">
+                <div class="bts-feature-icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                    <circle cx="12" cy="13" r="4"/>
+                  </svg>
+                </div>
+                Equipe de produção audiovisual
+              </div>
+              <div class="bts-feature">
+                <div class="bts-feature-icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                  </svg>
+                </div>
+                Roteiro e direção criativa
+              </div>
+              <div class="bts-feature">
+                <div class="bts-feature-icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="23 7 16 12 23 17 23 7"/>
+                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                  </svg>
+                </div>
+                Produção e edição profissional
+              </div>
+              <div class="bts-feature">
+                <div class="bts-feature-icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18V5l12-2v13"/>
+                    <circle cx="6" cy="18" r="3"/>
+                    <circle cx="18" cy="16" r="3"/>
+                  </svg>
+                </div>
+                Trilha sonora e mixagem de áudio
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Floating indicators -->
+        <div class="bts-indicators" aria-hidden="true">
+          <div class="bts-indicator">
+            <div class="bts-indicator-dot"></div>
+            Gravação em andamento
+          </div>
+          <div class="bts-indicator">
+            <div class="bts-indicator-dot" style="background:#22C55E"></div>
+            Equipe completa
+          </div>
+          <div class="bts-indicator">
+            <div class="bts-indicator-dot" style="background:#3B82F6"></div>
+            Câmera profissional
+          </div>
+        </div>
+
+        <!-- Stats strip at bottom -->
+        <div class="bts-stat-strip" id="bts-stat-strip" aria-label="Números de produção">
+          <!-- preenchido via JS -->
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         CHARACTERS
+    ══════════════════════════════════════════════════ -->
+    <section id="personagens" class="section" aria-label="Personagens do universo Wiris Viana">
+      <div class="container">
+        <header class="section-header">
+          <div class="label-eyebrow reveal">O Universo</div>
+          <h2 class="display-md reveal reveal-delay-1">
+            Personagens que a audiência<br>conhece e acompanha.
+          </h2>
+          <p class="reveal reveal-delay-2">
+            Um elenco recorrente que constrói identificação e fideliza a audiência ao longo das temporadas.
+          </p>
+        </header>
+
+        <div class="characters-grid" id="characters-grid" role="list">
+          <!-- preenchido via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         ADVERTISING FORMATS
+    ══════════════════════════════════════════════════ -->
+    <section id="publicidade" aria-label="Formatos de publicidade disponíveis">
+      <div class="container" style="padding-top:6rem;padding-bottom:6rem">
+        <div class="advertising-intro">
+          <div class="label-eyebrow reveal">Para Marcas</div>
+          <h2 class="display-md reveal reveal-delay-1">
+            Formas da sua marca<br>entrar nesse universo.
+          </h2>
+          <p class="reveal reveal-delay-2">
+            Cada formato foi pensado para integrar a mensagem da sua marca de maneira autêntica e eficiente dentro do conteúdo que a audiência de Wiris já consome e ama.
+          </p>
+        </div>
+
+        <div class="advertising-grid" id="advertising-grid" role="list">
+          <!-- preenchido via JS -->
+        </div>
+
+        <!-- CTA Strip -->
+        <div class="advertising-cta-strip reveal reveal-delay-2" id="advertising-cta-strip">
+          <!-- preenchido via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         BRAND CASES
+    ══════════════════════════════════════════════════ -->
+    <section id="marcas" class="section" aria-label="Marcas parceiras">
+      <div class="container">
+        <header class="section-header">
+          <div class="label-eyebrow reveal">Marcas Parceiras</div>
+          <h2 class="display-md reveal reveal-delay-1">
+            Marcas que já fizeram<br>parte dessa história.
+          </h2>
+          <p class="reveal reveal-delay-2">
+            Empresas que escolheram o universo de Wiris para ampliar sua presença junto a uma audiência engajada.
+          </p>
+        </header>
+
+        <div class="brands-grid reveal reveal-delay-2" id="brands-grid" role="list">
+          <!-- preenchido via JS -->
+        </div>
+
+        <p class="brands-cta reveal reveal-delay-3">
+          Logos e cases detalhados disponíveis mediante solicitação comercial.
+        </p>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         CONTACT CTA
+    ══════════════════════════════════════════════════ -->
+    <section id="contato" aria-label="Contato comercial">
+      <div class="contact-bg-grid" aria-hidden="true"></div>
+      <div class="contact-bg-radial" aria-hidden="true"></div>
+
+      <div class="container">
+        <div class="contact-inner">
+
+          <div class="label-eyebrow reveal">Vamos Conversar</div>
+
+          <h2 class="contact-headline reveal reveal-delay-1">
+            Sua marca pode<br>fazer parte<br><em>dessa história.</em>
+          </h2>
+
+          <p class="contact-sub reveal reveal-delay-2">
+            Seja uma integração pontual ou uma campanha de longo prazo, estamos prontos para construir algo que funcione de verdade para a sua marca e para nossa audiência.
+          </p>
+
+          <div class="contact-actions reveal reveal-delay-3" id="contact-actions">
+            <!-- preenchido via JS com base nos dados de contato -->
+          </div>
+
+          <p class="contact-disclaimer reveal reveal-delay-4" id="contact-disclaimer">
+            Respondemos em até 24 horas úteis.
+          </p>
+
+        </div>
+      </div>
+    </section>
+
+  </main><!-- /main -->
+
+  <!-- ══════════════════════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════════════════════ -->
+  <footer role="contentinfo">
+    <div class="container">
+      <div class="footer-inner">
+
+        <div class="footer-logo">
+          <span class="footer-logo-name">Wiris Viana</span>
+          <span class="footer-logo-sub">Creator & Media</span>
+        </div>
+
+        <nav class="footer-nav" aria-label="Links do rodapé">
+          <a href="#audiencia">Audiência</a>
+          <a href="#conteudo">Conteúdo</a>
+          <a href="#publicidade">Publicidade</a>
+          <a href="#bastidores">Bastidores</a>
+          <a href="#contato">Contato</a>
+        </nav>
+
+        <div class="footer-copy">
+          <p>&copy; <span id="footer-year"></span> Wiris Viana. Todos os direitos reservados.</p>
+          <p style="margin-top:0.25rem;font-size:0.6875rem">Media Kit Digital</p>
+        </div>
+
+      </div>
+    </div>
+  </footer>
+
+  <!-- ── SCRIPTS ───────────────────────────────────────── -->
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/enhancements.js"></script>
+  <script>
+    // Dynamic year
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
