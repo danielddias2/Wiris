@@ -39,12 +39,12 @@ window.WV_CONFIG = {
     tiktokViews:         { value: 32800000, label: 'Views TikTok',         suffix: '+',  prefix: '' },
 
     // Instagram
-    instagramFollowers:  { value: 1.6M,    label: 'Seguidores Instagram', suffix: '',   prefix: '' },
+    instagramFollowers:  { value: 45200,    label: 'Seguidores Instagram', suffix: '',   prefix: '' },
     instagramReach:      { value: 9200000,  label: 'Alcance Mensal',       suffix: '+',  prefix: '' },
 
     // YouTube
-    youtubeSubscribers:  { value: 7.13M,    label: 'Inscritos YouTube',    suffix: '',   prefix: '' },
-    youtubeViews:        { value: 2.469.425.128,  label: 'Views YouTube',        suffix: '+',  prefix: '' },
+    youtubeSubscribers:  { value: 12800,    label: 'Inscritos YouTube',    suffix: '',   prefix: '' },
+    youtubeViews:        { value: 4100000,  label: 'Views YouTube',        suffix: '+',  prefix: '' },
 
     // Gerais
     totalFollowers:      { value: 136421,   label: 'Seguidores Totais',    suffix: '+',  prefix: '' },
