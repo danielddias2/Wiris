@@ -762,3 +762,52 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 });
+
+
+/* STABLE_COUNTER_LAYOUT_PATCH
+ * Keep animated counters from changing their inline width during digit changes.
+ * This prevents horizontal reflow/jitter while preserving the existing animation.
+ */
+(function () {
+  function stabilizeCounter(el) {
+    if (!el || el.dataset.counterStable === '1') return;
+    el.dataset.counterStable = '1';
+
+    const computed = getComputedStyle(el);
+    if (computed.display === 'inline') el.style.display = 'inline-block';
+    el.style.fontVariantNumeric = 'tabular-nums';
+    el.style.fontFeatureSettings = '"tnum"';
+
+    // Reserve the width of the widest expected rendered value when possible.
+    // The animation itself remains untouched.
+    const target = el.getAttribute('data-target');
+    if (target != null && target !== '') {
+      const clone = el.cloneNode(false);
+      clone.textContent = String(target) + (el.getAttribute('data-suffix') || '');
+      clone.style.cssText += ';position:absolute;visibility:hidden;white-space:nowrap;width:max-content;pointer-events:none;';
+      document.body.appendChild(clone);
+      const width = clone.getBoundingClientRect().width;
+      clone.remove();
+      if (width > 0) {
+        el.style.minWidth = Math.ceil(width) + 'px';
+        el.style.display = 'inline-block';
+        el.style.textAlign = 'left';
+      }
+    }
+  }
+
+  function initStableCounters() {
+    document.querySelectorAll('[data-counter]').forEach(stabilizeCounter);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initStableCounters, { once: true });
+  } else {
+    initStableCounters();
+  }
+
+  // Some counters are injected dynamically by the existing site scripts.
+  const observer = new MutationObserver(() => initStableCounters());
+  observer.observe(document.body, { childList: true, subtree: true });
+})();
+

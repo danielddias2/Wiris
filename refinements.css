@@ -529,3 +529,78 @@ html {
   body { background: white; color: black; }
   .section { page-break-inside: avoid; }
 }
+
+
+/* ============================================================
+   MOBILE / COUNTER STABILITY PATCH
+   Preserves the existing visual layout while preventing
+   viewport overflow and counter-induced horizontal reflow.
+   ============================================================ */
+
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+#main-content,
+#inicio,
+#stats,
+#plataformas,
+#crescimento,
+#audiencia,
+#conteudo,
+#personagens,
+#publicidade,
+#marcas,
+#bastidores,
+#contato {
+  max-width: 100%;
+}
+
+[data-counter] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  white-space: nowrap;
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .nav-inner,
+  .hero-inner,
+  .container {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .hero-image-wrap,
+  .hero-float-card {
+    max-width: calc(100vw - 2rem);
+  }
+
+  .hero-float-card {
+    box-sizing: border-box;
+  }
+
+  .stats-grid,
+  .platforms-grid,
+  .audience-grid,
+  .content-grid,
+  .characters-grid,
+  .advertising-grid {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .stats-grid > *,
+  .platforms-grid > *,
+  .audience-grid > *,
+  .content-grid > *,
+  .characters-grid > *,
+  .advertising-grid > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
