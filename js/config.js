@@ -43,7 +43,7 @@ window.WV_CONFIG = {
     whatsapp: null,           // ex: '5511999999999'
     email: null,              // ex: 'contato@wirisviana.com'
     instagram: null,          // ex: 'https://instagram.com/wirisviana'
-    youtubeChannel: null,     // ex: 'https://youtube.com/@wirisviana'
+    youtubeChannel: 'https://www.youtube.com/@WirisVianaofc',
     tiktok: null,             // ex: 'https://tiktok.com/@wirisviana'
     kwai: null,               // ex: 'https://www.kwai.com/@wirisviana'
   },
@@ -126,7 +126,7 @@ window.WV_CONFIG = {
       growth: '+22%',
       growthLabel: 'Crescimento Mensal',
       contentType: 'Séries, episódios completos, vlogs',
-      url: null, // [PLACEHOLDER]
+      url: 'https://www.youtube.com/@WirisVianaofc',
     },
     {
       id: 'kwai',

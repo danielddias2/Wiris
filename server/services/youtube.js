@@ -28,7 +28,22 @@ async function fetchYouTubeSubscribers() {
     throw new Error('YOUTUBE_API_KEY ou YOUTUBE_CHANNEL_ID não configurados no .env');
   }
 
-  const url = `${YOUTUBE_API_BASE}/channels?part=statistics&id=${encodeURIComponent(channelId)}&key=${apiKey}`;
+  let url;
+  const trimmed = channelId.trim();
+
+  // 1. Se contiver ID canônico do canal (ex: UCz2A8OXLR2xwYE63zWbu7IA)
+  const ucMatch = trimmed.match(/UC[a-zA-Z0-9_-]{20,24}/);
+  if (ucMatch) {
+    url = `${YOUTUBE_API_BASE}/channels?part=statistics&id=${ucMatch[0]}&key=${apiKey}`;
+  } else {
+    // 2. Se for link com handle ou handle direto (ex: https://www.youtube.com/@WirisVianaofc ou @WirisVianaofc)
+    const handleMatch = trimmed.match(/@([a-zA-Z0-9_.-]+)/);
+    if (handleMatch) {
+      url = `${YOUTUBE_API_BASE}/channels?part=statistics&forHandle=${encodeURIComponent(handleMatch[1])}&key=${apiKey}`;
+    } else {
+      url = `${YOUTUBE_API_BASE}/channels?part=statistics&id=${encodeURIComponent(trimmed)}&key=${apiKey}`;
+    }
+  }
 
   const response = await fetch(url, { timeout: 10000 });
 
