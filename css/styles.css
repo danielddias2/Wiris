@@ -393,12 +393,13 @@ h1, h2, h3, h4 {
 }
 
 /* ── HERO ───────────────────────────────────────────── */
+#inicio,
 #hero {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   background-color: var(--bg-primary);
 }
 
@@ -545,21 +546,27 @@ h1, h2, h3, h4 {
   flex-wrap: wrap;
 }
 
+/* ── HERO IMAGE WRAP ───────────────────────────────────────
+   CRITICAL: overflow DEVE ser visible — float cards saem
+   para fora do container sem serem clipados.
+   O overflow:hidden fica APENAS no hero-image-bg.
+──────────────────────────────────────────────────────────── */
 .hero-image-wrap {
   position: relative;
   height: 600px;
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  overflow: visible; /* não clipa os float cards */
 }
 
 .hero-image-bg {
   position: absolute;
-  inset: 0;
+  inset: 0 8% 0 8%; /* margem lateral para float cards */
   background: linear-gradient(160deg, var(--bg-surface-3) 0%, var(--bg-surface) 100%);
   border-radius: var(--radius-xl);
   border: 1px solid var(--border);
-  overflow: hidden;
+  overflow: hidden; /* clipa APENAS a imagem */
 }
 
 .hero-image-bg::after {
@@ -605,6 +612,10 @@ h1, h2, h3, h4 {
   opacity: 0.5;
 }
 
+/* ── FLOAT CARDS ───────────────────────────────────────────
+   z-index alto, posicionados em relação ao hero-image-wrap.
+   Nunca clam por overflow — overflow:visible no pai.
+──────────────────────────────────────────────────────────── */
 .hero-float-card {
   position: absolute;
   background: var(--bg-surface-2);
@@ -612,10 +623,13 @@ h1, h2, h3, h4 {
   border-radius: var(--radius-md);
   padding: 0.75rem 1rem;
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   gap: 0.625rem;
   box-shadow: var(--shadow-lg);
+  z-index: 10;
+  white-space: nowrap;
 }
 
 .hero-float-card-value {
@@ -645,22 +659,32 @@ h1, h2, h3, h4 {
   flex-shrink: 0;
 }
 
+/* Float 1 — TikTok: inferior esquerdo */
 .hero-float-1 {
-  bottom: 20%;
-  left: -5%;
+  bottom: 22%;
+  left: 2%;
   animation: float-y 4s ease-in-out infinite;
 }
 
+/* Float 2 — YouTube: superior direito */
 .hero-float-2 {
-  top: 18%;
-  right: -5%;
+  top: 12%;
+  right: 2%;
   animation: float-y 4s ease-in-out infinite 1.5s;
 }
 
+/* Float 3 — Instagram: meio direito */
 .hero-float-3 {
-  bottom: 40%;
-  right: -8%;
+  bottom: 42%;
+  right: 2%;
   animation: float-y 4s ease-in-out infinite 0.75s;
+}
+
+/* Float 4 — Kwai: meio esquerdo */
+.hero-float-4 {
+  top: 42%;
+  left: 2%;
+  animation: float-y 4s ease-in-out infinite 2.2s;
 }
 
 @keyframes float-y {
@@ -700,16 +724,18 @@ h1, h2, h3, h4 {
 @media (max-width: 1023px) {
   .hero-inner {
     grid-template-columns: 1fr;
-    padding-top: 100px;
-    gap: 3rem;
+    padding-top: 60px;
+    gap: 2.5rem;
   }
   .hero-image-wrap {
     height: 420px;
+    max-width: 360px;
+    margin: 0 auto;
     order: -1;
   }
-  .hero-float-1 { left: -2%; }
-  .hero-float-2 { right: -2%; }
-  .hero-float-3 { display: none; }
+  .hero-float-1 { bottom: 12px; left: 0; }
+  .hero-float-2 { top: 12px; right: 0; }
+  .hero-float-3 { display: flex; top: 48%; right: 0; }
 }
 
 @media (max-width: 639px) {

@@ -6,7 +6,7 @@
 
   <!-- ── SEO ─────────────────────────────────────────── -->
   <title>Wiris Viana — Creator & Media</title>
-  <meta name="description" content="Wiris Viana é um criador de conteúdo com mais de 136 mil seguidores e 41 milhões de visualizações mensais no TikTok, Instagram, YouTube e Kwai. Conheça os formatos de publicidade e parcerias comerciais.">
+  <meta name="description" content="Wiris Viana é um criador de conteúdo com mais de 136 mil seguidores e 41 milhões de visualizações mensais no YouTube, TikTok, Instagram e Kwai. Conheça os formatos de publicidade e parcerias comerciais.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://wirisviana.com/">
 
@@ -49,10 +49,10 @@
   <div id="scroll-progress" aria-hidden="true" role="progressbar" aria-label="Progresso de leitura"></div>
 
   <!-- Skip to main content (acessibilidade) -->
-  <a href="#main-content" id="skip-main" class="sr-only" style="position:fixed;top:-100%;left:1rem;z-index:9999;background:var(--accent);color:#fff;padding:0.5rem 1rem;border-radius:4px;font-weight:600;transition:top 0.2s" onfocus="this.style.top='0.5rem'" onblur="this.style.top='-100%'">Ir para o conteúdo</a>
+  <a href="#main-content" id="skip-main" class="sr-only">Ir para o conteúdo</a>
 
   <!-- ══════════════════════════════════════════════════════
-       NAVBAR (position: fixed, z-index: 1000)
+       NAVBAR (sticky/fixed: 0..64px)
   ══════════════════════════════════════════════════════ -->
   <header role="banner">
     <nav id="navbar" aria-label="Navegação principal">
@@ -64,7 +64,7 @@
           <span class="nav-logo-sub">Creator & Media</span>
         </a>
 
-        <!-- Desktop links (preenchidos via JS) -->
+        <!-- Desktop links (6 seções oficiais) -->
         <div class="nav-links" id="nav-links" role="list"></div>
 
         <!-- Right actions -->
@@ -108,29 +108,44 @@
 
       </div>
 
-      <!-- Mobile Menu (links preenchidos via JS) -->
+      <!-- Mobile Menu (6 seções oficiais) -->
       <nav id="nav-mobile-menu" class="nav-mobile-menu" aria-label="Menu mobile"></nav>
     </nav>
   </header>
 
   <!-- ══════════════════════════════════════════════════════
-       LIVE TICKER
-       Separado da navbar com margin-top: 64px (altura do nav)
+       LETREIRO / MARQUEE (REQUISITO 15: SEPARAÇÃO VISUAL CLARA)
+       Hierarquia visual deliberada:
+       NAVBAR (0..64px)
+       ↓
+       ESPAÇO / RESPIRO VISUAL (64px..96px = 32px de respiro)
+       ↓
+       LETREIRO / MARQUEE
   ══════════════════════════════════════════════════════ -->
-  <div id="live-ticker" aria-hidden="true" role="marquee" style="margin-top: 76px;">
-    <div class="ticker-track" id="ticker-track"></div>
+  <div class="ticker-section" aria-hidden="true" role="marquee">
+    <div class="ticker-container">
+      <div id="live-ticker">
+        <div class="ticker-track" id="ticker-track"></div>
+      </div>
+    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════
        MAIN CONTENT
+       ORDEM EXATA DO DOM (REQUISITO 23):
+       1. #inicio
+       2. #audiencia
+       3. #conteudo
+       4. #publicidade
+       5. #bastidores
+       6. #contato
   ══════════════════════════════════════════════════════ -->
   <main id="main-content">
 
     <!-- ══════════════════════════════════════════════════
-         SEÇÃO 1: INÍCIO — #inicio
-         (antiga #hero, renomeada para corresponder ao nav)
+         01. INÍCIO — #inicio
     ══════════════════════════════════════════════════ -->
-    <section id="inicio" aria-label="Apresentação">
+    <section id="inicio" aria-label="Apresentação inicial">
       <div class="hero-bg-grid" aria-hidden="true"></div>
       <div class="hero-bg-radial" aria-hidden="true"></div>
 
@@ -171,13 +186,13 @@
 
         </div><!-- /hero-content -->
 
-        <!-- Right: Photo + Float Cards
-             IMPORTANTE: os float cards estão FORA do hero-image-bg
-             para não sofrerem clipping pelo overflow:hidden da imagem.
+        <!-- Right: Photo + 3 Float Cards (REQUISITO 14: FIX CLIPPING YOUTUBE)
+             Os 3 balões permanecem totalmente visíveis no desktop e mobile,
+             sem corte por overflow-hidden e respeitando os limites da composição.
         -->
         <div class="hero-image-wrap" aria-hidden="true">
 
-          <!-- Imagem de fundo (overflow:hidden aplicado apenas aqui) -->
+          <!-- Container da foto (overflow:hidden apenas na foto) -->
           <div class="hero-image-bg">
             <div class="hero-photo-placeholder">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
@@ -186,16 +201,12 @@
               </svg>
               <p>Foto principal do Wiris</p>
             </div>
-            <!-- Para ativar: descomente a linha abaixo e remova o placeholder acima -->
             <!-- <img src="assets/images/wiris-hero.jpg" alt="Wiris Viana" class="hero-photo"> -->
           </div>
 
-          <!-- Float Cards: posicionados em relação ao hero-image-wrap,
-               MAS fora do hero-image-bg para evitar overflow clipping.
-               overflow: visible garantido no hero-image-wrap via CSS. -->
+          <!-- Balão 1: TikTok (inferior esquerdo) -->
           <div class="hero-float-card hero-float-1">
             <div class="hero-float-card-icon" style="background:rgba(255,0,80,0.15);color:#FF0050;">
-              <!-- TikTok icon -->
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.95a8.28 8.28 0 0 0 4.84 1.54V7.07a4.85 4.85 0 0 1-1.07-.38z"/>
               </svg>
@@ -206,9 +217,9 @@
             </div>
           </div>
 
+          <!-- Balão 2: YouTube (superior direito - 100% visível, sem clipping) -->
           <div class="hero-float-card hero-float-2">
             <div class="hero-float-card-icon" style="background:rgba(255,0,0,0.15);color:#FF0000;">
-              <!-- YouTube icon -->
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
               </svg>
@@ -219,9 +230,9 @@
             </div>
           </div>
 
+          <!-- Balão 3: Instagram (meio direito - 100% visível) -->
           <div class="hero-float-card hero-float-3">
             <div class="hero-float-card-icon" style="background:rgba(225,48,108,0.15);color:#E1306C;">
-              <!-- Instagram icon -->
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <rect x="2" y="2" width="20" height="20" rx="5"/>
                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
@@ -234,176 +245,176 @@
             </div>
           </div>
 
-          <!-- Float card Kwai (visível apenas em desktop amplo) -->
-          <div class="hero-float-card hero-float-4">
-            <div class="hero-float-card-icon" style="background:rgba(255,105,0,0.15);color:#FF6900;">
-              <!-- Kwai icon (stylized K) -->
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1 14H9V8h2v8zm4.5-8l-3.5 4 3.5 4h-2.5L10 14.5V13l2.5-3H16.5z"/>
-              </svg>
-            </div>
-            <div>
-              <div class="hero-float-card-value" id="float-kwai" data-counter data-target="0" data-suffix="">—</div>
-              <div class="hero-float-card-label">Kwai Seguidores</div>
-            </div>
-          </div>
-
         </div><!-- /hero-image-wrap -->
 
       </div><!-- /hero-inner -->
 
       <!-- Scroll indicator -->
-      <div class="hero-scroll-indicator" aria-hidden="true">
+      <a href="#audiencia" class="hero-scroll-indicator" aria-label="Rolar para a seção Audiência">
         <div class="hero-scroll-line"></div>
         <span>Scroll</span>
-      </div>
+      </a>
 
     </section><!-- /#inicio -->
 
-    <!-- Stats (subsection do Início, sem nav anchor próprio) -->
-    <section id="stats" aria-label="Métricas de audiência">
-      <div class="container">
-        <div class="stats-grid" id="stats-grid" role="list">
-          <!-- preenchido via JS -->
-        </div>
-      </div>
-    </section>
+    <!-- ══════════════════════════════════════════════════
+         02. AUDIÊNCIA — #audiencia
+         Engloba:
+         - Barra de Métricas Rápidas (Stats Grid)
+         - Plataformas (Presença Digital: YouTube, TikTok, Instagram, Kwai)
+         - Gráfico de Trajetória / Crescimento
+         - Perfil da Audiência (Pessoas Reais, Demografia & Interesses)
+    ══════════════════════════════════════════════════ -->
+    <section id="audiencia" class="section-audiencia" aria-label="Audiência e Plataformas">
 
-    <!-- Plataformas (subsection antes da Audiência) -->
-    <section id="plataformas" class="section" aria-label="Presença digital por plataforma">
-      <div class="container">
-        <header class="section-header">
-          <div class="label-eyebrow reveal">Presença Digital</div>
-          <h2 class="display-md reveal reveal-delay-1">
-            Uma audiência construída<br>em múltiplas plataformas.
-          </h2>
-          <p class="reveal reveal-delay-2">
-            Conteúdo distribuído estrategicamente onde a audiência está — com formatos nativos e linguagem própria em TikTok, Instagram, YouTube e Kwai.
-          </p>
-        </header>
-
-        <div class="platforms-grid" id="platforms-grid" role="list">
-          <!-- preenchido via JS -->
-        </div>
-
-        <!-- Platform bar comparison -->
-        <div style="margin-top:3rem;padding:2rem 2.5rem;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);">
-          <div class="label-eyebrow reveal" style="margin-bottom:1.25rem">Distribuição de Seguidores</div>
-          <div class="platform-bar-wrap" id="platform-bars">
+      <!-- Bloco A: Barra de Métricas Rápidas -->
+      <div id="stats" class="stats-section" aria-label="Métricas de audiência consolidada">
+        <div class="container">
+          <div class="stats-grid" id="stats-grid" role="list">
             <!-- preenchido via JS -->
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- Crescimento (subsection) -->
-    <section id="crescimento" aria-label="Crescimento de audiência">
-      <div class="container">
-        <header class="section-header reveal">
-          <div class="label-eyebrow">Crescimento</div>
-          <h2 class="display-md reveal-delay-1">Trajetória em ascensão.</h2>
-        </header>
-
-        <div class="chart-wrap reveal reveal-delay-2">
-          <div class="chart-header">
-            <div>
-              <div class="chart-title">Crescimento de Visualizações</div>
-              <div class="chart-subtitle">Últimos 6 meses — todas as plataformas</div>
-            </div>
-            <div class="chart-legend" id="chart-legend" aria-label="Legenda do gráfico"></div>
-          </div>
-
-          <div class="chart-canvas-wrap">
-            <canvas id="growth-chart" aria-label="Gráfico de crescimento de visualizações" role="img"></canvas>
-          </div>
-
-          <p class="chart-disclaimer">
-            * Dados representativos do crescimento da audiência. Valores são aproximações mensais.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ══════════════════════════════════════════════════
-         SEÇÃO 2: AUDIÊNCIA — #audiencia
-    ══════════════════════════════════════════════════ -->
-    <section id="audiencia" class="section" aria-label="Perfil da audiência">
-      <div class="container">
-        <div class="audience-grid">
-
-          <div class="audience-content">
-            <div class="label-eyebrow reveal">A Audiência</div>
+      <!-- Bloco B: Presença Digital por Plataforma (YouTube, TikTok, Instagram, Kwai) -->
+      <div id="plataformas" class="section platforms-section" aria-label="Presença digital por plataforma">
+        <div class="container">
+          <header class="section-header">
+            <div class="label-eyebrow reveal">Presença Digital</div>
             <h2 class="display-md reveal reveal-delay-1">
-              Pessoas reais.<br>Atenção genuína.
+              Uma audiência construída<br>em múltiplas plataformas.
             </h2>
             <p class="reveal reveal-delay-2">
-              Por trás dos números existe uma comunidade engajada que acompanha o universo de Wiris ativamente, interage com o conteúdo e responde às recomendações de marcas com alto índice de conversão — em TikTok, Instagram, YouTube e Kwai.
+              Conteúdo distribuído estrategicamente onde a audiência está — com formatos nativos e linguagem própria no YouTube, TikTok, Instagram e Kwai.
             </p>
+          </header>
 
-            <div>
-              <div class="label-eyebrow reveal reveal-delay-3" style="margin-bottom:1rem">Interesses da Audiência</div>
-              <div class="audience-interests" id="audience-interests" aria-label="Interesses da audiência">
-                <!-- preenchido via JS -->
-              </div>
-            </div>
-
-            <div class="audience-placeholder-note reveal reveal-delay-4">
-              📊 Dados demográficos detalhados disponíveis mediante solicitação comercial.
-            </div>
+          <div class="platforms-grid" id="platforms-grid" role="list">
+            <!-- preenchido via JS -->
           </div>
 
-          <div class="audience-stats-grid reveal-right reveal-delay-2" aria-label="Números da audiência">
-
-            <div class="audience-stat-cell">
-              <div class="audience-stat-value">
-                <span data-counter data-target="136421" data-suffix="+">0+</span>
-              </div>
-              <div class="audience-stat-label">Seguidores Totais</div>
-              <div class="audience-stat-note">TikTok + Instagram + YouTube + Kwai</div>
+          <!-- Barra de Comparação e Distribuição de Seguidores -->
+          <div class="platform-bar-container reveal reveal-delay-2">
+            <div class="label-eyebrow" style="margin-bottom:1.25rem">Distribuição de Audiência por Plataforma</div>
+            <div class="platform-bar-wrap" id="platform-bars">
+              <!-- preenchido via JS -->
             </div>
-
-            <div class="audience-stat-cell">
-              <div class="audience-stat-value">
-                <span data-counter data-target="41" data-suffix="M+">0</span>
-              </div>
-              <div class="audience-stat-label">Views por Mês</div>
-              <div class="audience-stat-note">Média dos últimos 3 meses</div>
-            </div>
-
-            <div class="audience-stat-cell">
-              <div class="audience-stat-value" style="color:var(--accent)">
-                <span data-counter data-target="8.7" data-suffix="%">0%</span>
-              </div>
-              <div class="audience-stat-label">Taxa de Engajamento</div>
-              <div class="audience-stat-note">Acima da média do nicho</div>
-            </div>
-
-            <div class="audience-stat-cell">
-              <div class="audience-stat-value">
-                <span data-counter data-target="9.2" data-suffix="M+">0</span>
-              </div>
-              <div class="audience-stat-label">Alcance Mensal</div>
-              <div class="audience-stat-note">Contas únicas impactadas</div>
-            </div>
-
           </div>
-
         </div>
       </div>
+
+      <!-- Bloco C: Gráfico de Crescimento -->
+      <div id="crescimento" class="section chart-section" aria-label="Crescimento de audiência">
+        <div class="container">
+          <header class="section-header reveal">
+            <div class="label-eyebrow">Crescimento</div>
+            <h2 class="display-md reveal-delay-1">Trajetória em ascensão.</h2>
+          </header>
+
+          <div class="chart-wrap reveal reveal-delay-2">
+            <div class="chart-header">
+              <div>
+                <div class="chart-title">Crescimento de Visualizações</div>
+                <div class="chart-subtitle">Últimos 6 meses — todas as plataformas (YouTube, TikTok, Instagram, Kwai)</div>
+              </div>
+              <div class="chart-legend" id="chart-legend" aria-label="Legenda do gráfico"></div>
+            </div>
+
+            <div class="chart-canvas-wrap">
+              <canvas id="growth-chart" aria-label="Gráfico de crescimento de visualizações" role="img"></canvas>
+            </div>
+
+            <p class="chart-disclaimer">
+              * Dados representativos do crescimento da audiência. Valores consolidados mensais.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bloco D: Perfil da Audiência e Interesses -->
+      <div class="section audience-profile-section" aria-label="Perfil detalhado da audiência">
+        <div class="container">
+          <div class="audience-grid">
+
+            <div class="audience-content">
+              <div class="label-eyebrow reveal">A Audiência</div>
+              <h2 class="display-md reveal reveal-delay-1">
+                Pessoas reais.<br>Atenção genuína.
+              </h2>
+              <p class="reveal reveal-delay-2">
+                Por trás dos números existe uma comunidade engajada que acompanha o universo de Wiris ativamente, interage com o conteúdo e responde às recomendações de marcas com alto índice de conversão — em YouTube, TikTok, Instagram e Kwai.
+              </p>
+
+              <div>
+                <div class="label-eyebrow reveal reveal-delay-3" style="margin-bottom:1rem">Interesses da Audiência</div>
+                <div class="audience-interests" id="audience-interests" aria-label="Interesses da audiência">
+                  <!-- preenchido via JS -->
+                </div>
+              </div>
+
+              <div class="audience-placeholder-note reveal reveal-delay-4">
+                📊 Dados demográficos detalhados disponíveis mediante solicitação comercial.
+              </div>
+            </div>
+
+            <div class="audience-stats-grid reveal-right reveal-delay-2" aria-label="Números consolidados da audiência">
+
+              <div class="audience-stat-cell">
+                <div class="audience-stat-value">
+                  <span data-counter data-target="136421" data-suffix="+">0+</span>
+                </div>
+                <div class="audience-stat-label">Seguidores Totais</div>
+                <div class="audience-stat-note">YouTube + TikTok + Instagram + Kwai</div>
+              </div>
+
+              <div class="audience-stat-cell">
+                <div class="audience-stat-value">
+                  <span data-counter data-target="41" data-suffix="M+">0</span>
+                </div>
+                <div class="audience-stat-label">Views por Mês</div>
+                <div class="audience-stat-note">Média consolidada dos últimos 3 meses</div>
+              </div>
+
+              <div class="audience-stat-cell">
+                <div class="audience-stat-value" style="color:var(--accent)">
+                  <span data-counter data-target="8.7" data-suffix="%">0%</span>
+                </div>
+                <div class="audience-stat-label">Taxa de Engajamento</div>
+                <div class="audience-stat-note">Acima da média do segmento</div>
+              </div>
+
+              <div class="audience-stat-cell">
+                <div class="audience-stat-value">
+                  <span data-counter data-target="9.2" data-suffix="M+">0</span>
+                </div>
+                <div class="audience-stat-label">Alcance Mensal</div>
+                <div class="audience-stat-note">Contas únicas impactadas</div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
     </section><!-- /#audiencia -->
 
     <!-- ══════════════════════════════════════════════════
-         SEÇÃO 3: CONTEÚDO — #conteudo
+         03. CONTEÚDO — #conteudo
+         Engloba:
+         - Showcase de Conteúdo (Web-novelas, Séries, Produções)
+         - O Universo e Personagens
     ══════════════════════════════════════════════════ -->
-    <section id="conteudo" aria-label="Universo de conteúdo">
-      <div class="container" style="padding-top:6rem;padding-bottom:6rem">
+    <section id="conteudo" class="section-conteudo" aria-label="Universo de conteúdo">
+
+      <div class="container" style="padding-top:6rem;padding-bottom:4rem">
         <header class="section-header">
           <div class="label-eyebrow reveal">O Conteúdo</div>
           <h2 class="display-md reveal reveal-delay-1">
             Produção, não apenas postagem.
           </h2>
           <p class="reveal reveal-delay-2">
-            Web-novelas, séries, personagens e narrativas que constroem comunidade e geram atenção de forma consistente — em TikTok, YouTube, Instagram e Kwai.
+            Web-novelas, séries, personagens e narrativas que constroem comunidade e geram atenção de forma consistente — no YouTube, TikTok, Instagram e Kwai.
           </p>
         </header>
 
@@ -411,40 +422,45 @@
           <!-- preenchido via JS -->
         </div>
       </div>
-    </section><!-- /#conteudo -->
 
-    <!-- Personagens (subsection de Conteúdo) -->
-    <section id="personagens" class="section" aria-label="Personagens do universo Wiris Viana" style="background:var(--bg-primary);">
-      <div class="container">
-        <header class="section-header">
-          <div class="label-eyebrow reveal">O Universo</div>
-          <h2 class="display-md reveal reveal-delay-1">
-            Personagens que a audiência<br>conhece e acompanha.
-          </h2>
-          <p class="reveal reveal-delay-2">
-            Um elenco recorrente que constrói identificação e fideliza a audiência ao longo das temporadas.
-          </p>
-        </header>
+      <!-- Personagens do Universo -->
+      <div id="personagens" class="characters-section" aria-label="Personagens do universo Wiris Viana">
+        <div class="container" style="padding-top:2rem;padding-bottom:6rem">
+          <header class="section-header">
+            <div class="label-eyebrow reveal">O Universo</div>
+            <h2 class="display-md reveal reveal-delay-1">
+              Personagens que a audiência<br>conhece e acompanha.
+            </h2>
+            <p class="reveal reveal-delay-2">
+              Um elenco recorrente que constrói identificação e fideliza a audiência ao longo das temporadas.
+            </p>
+          </header>
 
-        <div class="characters-grid" id="characters-grid" role="list">
-          <!-- preenchido via JS -->
+          <div class="characters-grid" id="characters-grid" role="list">
+            <!-- preenchido via JS -->
+          </div>
         </div>
       </div>
-    </section>
+
+    </section><!-- /#conteudo -->
 
     <!-- ══════════════════════════════════════════════════
-         SEÇÃO 4: PUBLICIDADE — #publicidade
-         (movida para ANTES de #bastidores conforme briefing)
+         04. PUBLICIDADE — #publicidade
+         Engloba:
+         - Formatos de Publicidade Comerciais
+         - Faixa de CTA para Proposta
+         - Marcas Parceiras
     ══════════════════════════════════════════════════ -->
-    <section id="publicidade" aria-label="Formatos de publicidade disponíveis">
-      <div class="container" style="padding-top:6rem;padding-bottom:6rem">
+    <section id="publicidade" class="section-publicidade" aria-label="Formatos de publicidade disponíveis">
+
+      <div class="container" style="padding-top:6rem;padding-bottom:4rem">
         <div class="advertising-intro">
           <div class="label-eyebrow reveal">Para Marcas</div>
           <h2 class="display-md reveal reveal-delay-1">
             Formas da sua marca<br>entrar nesse universo.
           </h2>
           <p class="reveal reveal-delay-2">
-            Cada formato foi pensado para integrar a mensagem da sua marca de maneira autêntica dentro do conteúdo que a audiência de Wiris já consome — em TikTok, Instagram, YouTube e Kwai.
+            Cada formato foi pensado para integrar a mensagem da sua marca de maneira autêntica dentro do conteúdo que a audiência de Wiris já consome — no YouTube, TikTok, Instagram e Kwai.
           </p>
         </div>
 
@@ -456,38 +472,39 @@
           <!-- preenchido via JS -->
         </div>
       </div>
-    </section>
 
-    <!-- Marcas (subsection de Publicidade) -->
-    <section id="marcas" class="section" aria-label="Marcas parceiras" style="background:var(--bg-primary);">
-      <div class="container">
-        <header class="section-header">
-          <div class="label-eyebrow reveal">Marcas Parceiras</div>
-          <h2 class="display-md reveal reveal-delay-1">
-            Marcas que já fizeram<br>parte dessa história.
-          </h2>
-          <p class="reveal reveal-delay-2">
-            Empresas que escolheram o universo de Wiris para ampliar sua presença junto a uma audiência engajada.
+      <!-- Marcas Parceiras -->
+      <div id="marcas" class="brands-section" aria-label="Marcas parceiras">
+        <div class="container" style="padding-top:2rem;padding-bottom:6rem">
+          <header class="section-header">
+            <div class="label-eyebrow reveal">Marcas Parceiras</div>
+            <h2 class="display-md reveal reveal-delay-1">
+              Marcas que já fizeram<br>parte dessa história.
+            </h2>
+            <p class="reveal reveal-delay-2">
+              Empresas que escolheram o universo de Wiris para ampliar sua presença junto a uma audiência engajada.
+            </p>
+          </header>
+
+          <div class="brands-grid reveal reveal-delay-2" id="brands-grid" role="list">
+            <!-- preenchido via JS -->
+          </div>
+
+          <p class="brands-cta reveal reveal-delay-3">
+            Logos e cases detalhados disponíveis mediante solicitação comercial.
           </p>
-        </header>
-
-        <div class="brands-grid reveal reveal-delay-2" id="brands-grid" role="list">
-          <!-- preenchido via JS -->
         </div>
-
-        <p class="brands-cta reveal reveal-delay-3">
-          Logos e cases detalhados disponíveis mediante solicitação comercial.
-        </p>
       </div>
-    </section>
+
+    </section><!-- /#publicidade -->
 
     <!-- ══════════════════════════════════════════════════
-         SEÇÃO 5: BASTIDORES — #bastidores
-         (agora DEPOIS de publicidade, conforme briefing)
+         05. BASTIDORES — #bastidores
     ══════════════════════════════════════════════════ -->
-    <section id="bastidores" aria-label="Por trás das câmeras">
+    <section id="bastidores" class="section-bastidores" aria-label="Por trás das câmeras">
       <div class="bts-image-wrap">
-        <!-- Placeholder até ter foto real -->
+
+        <!-- Placeholder para foto real -->
         <div class="bts-placeholder" role="img" aria-label="Foto de bastidores da produção de Wiris Viana">
           <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.75" opacity="0.2" aria-hidden="true">
             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
@@ -495,7 +512,6 @@
           </svg>
           <p style="font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted)">Foto de bastidores em breve</p>
         </div>
-        <!-- Para ativar: descomente e remova o placeholder acima -->
         <!-- <img src="assets/images/wiris-bastidores.jpg" alt="Equipe de produção de Wiris Viana nos bastidores" class="bts-image"> -->
 
         <div class="bts-overlay" aria-hidden="true"></div>
@@ -576,9 +592,9 @@
     </section><!-- /#bastidores -->
 
     <!-- ══════════════════════════════════════════════════
-         SEÇÃO 6: CONTATO — #contato
+         06. CONTATO — #contato
     ══════════════════════════════════════════════════ -->
-    <section id="contato" aria-label="Contato comercial">
+    <section id="contato" class="section-contato" aria-label="Contato comercial">
       <div class="contact-bg-grid" aria-hidden="true"></div>
       <div class="contact-bg-radial" aria-hidden="true"></div>
 
@@ -592,7 +608,7 @@
           </h2>
 
           <p class="contact-sub reveal reveal-delay-2">
-            Seja uma integração pontual ou uma campanha de longo prazo, estamos prontos para construir algo que funcione de verdade para a sua marca e para nossa audiência — em TikTok, Instagram, YouTube e Kwai.
+            Seja uma integração pontual ou uma campanha de longo prazo, estamos prontos para construir algo que funcione de verdade para a sua marca e para nossa audiência — no YouTube, TikTok, Instagram e Kwai.
           </p>
 
           <div class="contact-actions reveal reveal-delay-3" id="contact-actions">
@@ -610,18 +626,19 @@
   </main><!-- /main -->
 
   <!-- ══════════════════════════════════════════════════════
-       FOOTER
-  ══════════════════════════════════════════════════════ -->
+       FOOTER (Links canônicos para as 6 seções)
+  ══════════════════════════════════════════════════ -->
   <footer role="contentinfo">
     <div class="container">
       <div class="footer-inner">
 
         <div class="footer-logo">
           <span class="footer-logo-name">Wiris Viana</span>
-          <span class="footer-logo-sub">Creator & Media · TikTok · Instagram · YouTube · Kwai</span>
+          <span class="footer-logo-sub">Creator & Media · YouTube · TikTok · Instagram · Kwai</span>
         </div>
 
         <nav class="footer-nav" aria-label="Links do rodapé">
+          <a href="#inicio">Início</a>
           <a href="#audiencia">Audiência</a>
           <a href="#conteudo">Conteúdo</a>
           <a href="#publicidade">Publicidade</a>

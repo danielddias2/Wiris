@@ -1,6 +1,13 @@
 /**
- * WIRIS VIANA — Main JavaScript
- * Handles: theme, navigation, animations, counters, chart
+ * WIRIS VIANA — Main JavaScript v2
+ *
+ * Mudanças v2:
+ * - Busca de métricas do backend (quando configurado)
+ * - Atualização periódica de contadores ao vivo
+ * - Suporte ao Kwai como plataforma oficial
+ * - Navegação corrigida (#inicio, ordem correta)
+ * - Float cards sem dependência do backend (exibem valores do config)
+ * - Timestamp de última atualização
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -29,90 +36,83 @@ document.addEventListener('DOMContentLoaded', () => {
   const mobileMenu = document.getElementById('nav-mobile-menu');
 
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 20) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
-    }
+    navbar.classList.toggle('scrolled', window.scrollY > 20);
     updateActiveNav();
   }, { passive: true });
 
   mobileToggle.addEventListener('click', () => {
     const isOpen = mobileMenu.classList.toggle('open');
-    mobileToggle.setAttribute('aria-expanded', isOpen);
+    mobileToggle.setAttribute('aria-expanded', String(isOpen));
     mobileToggle.innerHTML = isOpen
       ? `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`
       : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
   });
 
-  // Close mobile menu on link click
   mobileMenu.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       mobileMenu.classList.remove('open');
-      mobileToggle.setAttribute('aria-expanded', false);
+      mobileToggle.setAttribute('aria-expanded', 'false');
       mobileToggle.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`;
     });
   });
 
   function updateActiveNav() {
-    const sections = document.querySelectorAll('section[id]');
+    // 6 seções oficiais e canônicas
+    const NAV_SECTIONS = ['inicio', 'audiencia', 'conteudo', 'publicidade', 'bastidores', 'contato'];
     const navLinks = document.querySelectorAll('.nav-links a, .nav-mobile-menu a');
-    let current = '';
+    let current = 'inicio';
 
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop - 80;
-      if (window.scrollY >= sectionTop) {
-        current = section.getAttribute('id');
-      }
-    });
+    const scrollPos = window.scrollY + window.innerHeight;
+    const docHeight = document.documentElement.scrollHeight;
+
+    // Se o usuário rolou até o rodapé, garante que "contato" fique ativo
+    if (docHeight - scrollPos < 100) {
+      current = 'contato';
+    } else {
+      NAV_SECTIONS.forEach(id => {
+        const section = document.getElementById(id);
+        if (!section) return;
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 140) {
+          current = id;
+        }
+      });
+    }
 
     navLinks.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === `#${current}`) {
-        link.classList.add('active');
-      }
+      const href = link.getAttribute('href');
+      link.classList.toggle('active', href === `#${current}`);
     });
   }
 
   // ── 3. ANIMATED COUNTER ──────────────────────────────────
   function animateCounter(el, target, duration = 1800, suffix = '', prefix = '') {
+    if (target === 0) { el.textContent = '—'; return; }
     const isDecimal = target % 1 !== 0;
     const start = performance.now();
-    const startVal = 0;
 
     function easeOutExpo(t) {
       return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
     }
 
     function formatNumber(num) {
-      if (num >= 1000000) {
-        return (num / 1000000).toFixed(num >= 10000000 ? 0 : 1) + 'M';
-      }
-      if (num >= 1000) {
-        return num.toLocaleString('pt-BR');
-      }
+      if (num >= 1_000_000) return (num / 1_000_000).toFixed(num >= 10_000_000 ? 0 : 1) + 'M';
+      if (num >= 1_000) return Math.floor(num).toLocaleString('pt-BR');
       return isDecimal ? num.toFixed(1) : Math.floor(num).toLocaleString('pt-BR');
     }
 
     function update(now) {
-      const elapsed = now - start;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = easeOutExpo(progress);
-      const current = startVal + (target - startVal) * eased;
-
+      const progress = Math.min((now - start) / duration, 1);
+      const current = target * easeOutExpo(progress);
       el.textContent = prefix + formatNumber(current) + suffix;
-
-      if (progress < 1) {
-        requestAnimationFrame(update);
-      } else {
-        el.textContent = prefix + formatNumber(target) + suffix;
-      }
+      if (progress < 1) requestAnimationFrame(update);
+      else el.textContent = prefix + formatNumber(target) + suffix;
     }
 
     requestAnimationFrame(update);
   }
 
-  // ── 4. SCROLL REVEAL & COUNTER TRIGGER ──────────────────
+  // ── 4. OBSERVERS ────────────────────────────────────────
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -131,45 +131,141 @@ document.addEventListener('DOMContentLoaded', () => {
       if (entry.isIntersecting) {
         const el = entry.target;
         const target = parseFloat(el.dataset.target);
-        const suffix = el.dataset.suffix || '';
-        const prefix = el.dataset.prefix || '';
-        animateCounter(el, target, 2000, suffix, prefix);
+        animateCounter(el, target, 2000, el.dataset.suffix || '', el.dataset.prefix || '');
         counterObserver.unobserve(el);
       }
     });
   }, { threshold: 0.3 });
 
-  document.querySelectorAll('[data-counter]').forEach(el => {
-    counterObserver.observe(el);
-  });
+  function observeCounters() {
+    document.querySelectorAll('[data-counter]').forEach(el => {
+      counterObserver.observe(el);
+    });
+  }
 
-  // ── 5. BUILD NAVIGATION ──────────────────────────────────
+  observeCounters();
+
+  // ── 5. LIVE METRICS — FETCH DO BACKEND ──────────────────
+  let liveMetrics = null; // cache local
+
+  async function fetchLiveMetrics() {
+    const apiUrl = C.metricsApiUrl;
+    if (!apiUrl) return null; // backend não configurado
+
+    try {
+      const response = await fetch(`${apiUrl}/api/metrics`, {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' },
+      });
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const data = await response.json();
+      liveMetrics = data;
+      return data;
+    } catch (err) {
+      console.warn('[metrics] Backend indisponível, usando valores estáticos:', err.message);
+      return null;
+    }
+  }
+
+  function applyLiveMetrics(data) {
+    if (!data || !data.metrics) return;
+    const m = data.metrics;
+
+    // Mapeamento plataforma → elemento do float card
+    const floatMap = {
+      tiktok:   document.getElementById('float-tiktok'),
+      youtube:  document.getElementById('float-youtube'),
+      instagram: document.getElementById('float-instagram'),
+      kwai:     document.getElementById('float-kwai'),
+    };
+
+    Object.entries(floatMap).forEach(([platform, el]) => {
+      if (!m[platform]) return;
+      const metric = m[platform];
+      const newValue = metric.value;
+
+      if (el && newValue > 0) {
+        el.dataset.target = String(newValue);
+        animateCounter(el, newValue, 1200, '', '');
+      }
+
+      // Atualizar também o card correspondente na seção de plataformas
+      const platformValEl = document.getElementById(`platform-val-${platform}`);
+      if (platformValEl && newValue > 0) {
+        platformValEl.innerHTML = `<span data-counter data-target="${newValue}" data-suffix="">${newValue.toLocaleString('pt-BR')}</span>`;
+      }
+    });
+
+    // Atualizar timestamp
+    updateMetricsTimestamp(data.fetchedAt, data.mode);
+  }
+
+  function updateMetricsTimestamp(fetchedAt, mode) {
+    const tsEl = document.getElementById('metrics-timestamp');
+    if (!tsEl) return;
+
+    if (!fetchedAt || mode === 'manual') {
+      tsEl.style.display = 'none';
+      return;
+    }
+
+    const date = new Date(fetchedAt);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMin = Math.floor(diffMs / 60000);
+
+    let label;
+    if (diffMin < 1) label = 'Atualizado agora';
+    else if (diffMin < 60) label = `Atualizado há ${diffMin} min`;
+    else label = 'Atualizado recentemente';
+
+    tsEl.textContent = `● ${label}`;
+    tsEl.style.display = 'flex';
+  }
+
+  async function initMetrics() {
+    const data = await fetchLiveMetrics();
+    if (data) applyLiveMetrics(data);
+
+    // Atualização periódica (padrão: 5 minutos)
+    if (C.metricsApiUrl && C.metricsRefreshInterval > 0) {
+      setInterval(async () => {
+        const fresh = await fetchLiveMetrics();
+        if (fresh) applyLiveMetrics(fresh);
+      }, C.metricsRefreshInterval);
+    }
+  }
+
+  initMetrics();
+
+  // ── 6. BUILD NAVIGATION ──────────────────────────────────
   function buildNav() {
     const navLinks = document.getElementById('nav-links');
     const mobileLinks = document.getElementById('nav-mobile-menu');
 
     C.nav.forEach(item => {
-      const a = document.createElement('a');
-      a.href = item.href;
-      a.textContent = item.label;
-      navLinks.appendChild(a);
-
-      const am = document.createElement('a');
-      am.href = item.href;
-      am.textContent = item.label;
-      mobileLinks.appendChild(am);
+      [navLinks, mobileLinks].forEach(container => {
+        const a = document.createElement('a');
+        a.href = item.href;
+        a.textContent = item.label;
+        container.appendChild(a);
+      });
     });
   }
 
   buildNav();
 
-  // ── 6. BUILD HERO STATS ──────────────────────────────────
+  // ── 7. BUILD HERO STATS ──────────────────────────────────
   function buildHeroStats() {
     const container = document.getElementById('hero-mini-stats');
+    if (!container) return;
+
     const heroItems = [
-      { stat: C.stats.totalFollowers,  label: 'Seguidores' },
-      { stat: C.stats.monthlyViews,    label: 'Views/Mês' },
-      { stat: C.stats.engagementRate,  label: 'Engajamento' },
+      { stat: C.stats.totalFollowers, label: 'Seguidores' },
+      { stat: C.stats.monthlyViews,   label: 'Views/Mês' },
+      { stat: C.stats.engagementRate, label: 'Engajamento' },
     ];
 
     heroItems.forEach((item, i) => {
@@ -185,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const val = document.createElement('div');
       val.className = 'hero-mini-stat-value';
       val.setAttribute('data-counter', '');
-      val.setAttribute('data-target', item.stat.value);
+      val.setAttribute('data-target', String(item.stat.value));
       val.setAttribute('data-suffix', item.stat.suffix);
       val.textContent = '0';
 
@@ -196,22 +292,22 @@ document.addEventListener('DOMContentLoaded', () => {
       stat.appendChild(val);
       stat.appendChild(lbl);
       container.appendChild(stat);
-
-      // Register for counter animation
       counterObserver.observe(val);
     });
   }
 
   buildHeroStats();
 
-  // ── 7. BUILD MAIN STATS SECTION ─────────────────────────
+  // ── 8. BUILD MAIN STATS SECTION ─────────────────────────
   function buildStats() {
     const grid = document.getElementById('stats-grid');
+    if (!grid) return;
+
     const statItems = [
       {
         stat: C.stats.totalFollowers,
         label: 'Seguidores Totais',
-        sublabel: 'TikTok + Instagram + YouTube',
+        sublabel: 'TikTok + Instagram + YouTube + Kwai',
         indicator: '+18% este mês',
       },
       {
@@ -253,16 +349,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   buildStats();
 
-  // ── 8. BUILD PLATFORMS ───────────────────────────────────
+  // ── 9. BUILD PLATFORMS (com Kwai) ───────────────────────
   function getPlatformEmoji(id) {
-    const map = { tiktok: '🎵', instagram: '📸', youtube: '▶️' };
+    const map = { tiktok: '🎵', instagram: '📸', youtube: '▶️', kwai: '🎬' };
     return map[id] || '🌐';
   }
 
   function buildPlatforms() {
     const grid = document.getElementById('platforms-grid');
+    if (!grid) return;
 
     C.platforms.forEach((p, idx) => {
+      const isPlaceholder = p.followers === 0;
       const card = document.createElement('div');
       card.className = `platform-card reveal reveal-delay-${idx + 1}`;
       card.style.setProperty('--platform-color', p.color);
@@ -273,12 +371,18 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="platform-icon" aria-hidden="true">${getPlatformEmoji(p.id)}</div>
             <div class="platform-name">${p.name}</div>
           </div>
-          <div class="platform-growth-badge">${p.growth} / mês</div>
+          ${p.growth && p.growth !== '[Em breve]'
+            ? `<div class="platform-growth-badge">${p.growth} / mês</div>`
+            : `<div class="platform-growth-badge" style="opacity:0.4;font-style:italic">Em breve</div>`
+          }
         </div>
 
         <div class="platform-main-metric">
-          <div class="platform-main-value">
-            <span data-counter data-target="${p.followers}" data-suffix="">0</span>
+          <div class="platform-main-value" id="platform-val-${p.id}">
+            ${isPlaceholder
+              ? `<span style="opacity:0.4;font-size:1rem;font-weight:500;letter-spacing:0">Em breve</span>`
+              : `<span data-counter data-target="${p.followers}" data-suffix="">0</span>`
+            }
           </div>
           <div class="platform-main-label">${p.followersLabel}</div>
         </div>
@@ -299,13 +403,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       grid.appendChild(card);
       revealObserver.observe(card);
-      counterObserver.observe(card.querySelector('[data-counter]'));
+      const counter = card.querySelector('[data-counter]');
+      if (counter) counterObserver.observe(counter);
     });
   }
 
   buildPlatforms();
 
-  // ── 9. BUILD GROWTH CHART ────────────────────────────────
+  // ── 10. BUILD GROWTH CHART ────────────────────────────────
   function buildChart() {
     const canvas = document.getElementById('growth-chart');
     if (!canvas || !window.Chart) return;
@@ -320,8 +425,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const cd = C.chartData;
 
     function formatLabel(val) {
-      if (val >= 1000000) return (val / 1000000).toFixed(0) + 'M';
-      if (val >= 1000) return (val / 1000).toFixed(0) + 'K';
+      if (val >= 1_000_000) return (val / 1_000_000).toFixed(0) + 'M';
+      if (val >= 1_000) return (val / 1_000).toFixed(0) + 'K';
       return val;
     }
 
@@ -339,9 +444,7 @@ document.addEventListener('DOMContentLoaded', () => {
             label: ds.label,
             data: ds.data,
             borderColor: ds.color,
-            backgroundColor: i === 0
-              ? 'rgba(255,0,0,0.08)'
-              : 'rgba(255,107,107,0.05)',
+            backgroundColor: i === 0 ? 'rgba(255,0,0,0.08)' : 'rgba(255,107,107,0.05)',
             borderWidth: i === 0 ? 2.5 : 1.5,
             pointBackgroundColor: ds.color,
             pointBorderColor: isDark() ? '#161616' : '#FFFFFF',
@@ -355,14 +458,8 @@ document.addEventListener('DOMContentLoaded', () => {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          animation: {
-            duration: 1400,
-            easing: 'easeOutQuart',
-          },
-          interaction: {
-            mode: 'index',
-            intersect: false,
-          },
+          animation: { duration: 1400, easing: 'easeOutQuart' },
+          interaction: { mode: 'index', intersect: false },
           plugins: {
             legend: { display: false },
             tooltip: {
@@ -372,32 +469,25 @@ document.addEventListener('DOMContentLoaded', () => {
               titleColor: isDark() ? '#FFFFFF' : '#0F0F0F',
               bodyColor: isDark() ? '#AAAAAA' : '#606060',
               padding: 12,
-              callbacks: {
-                label: (ctx) => ` ${ctx.dataset.label}: ${formatLabel(ctx.parsed.y)}`,
-              },
+              callbacks: { label: (ctx) => ` ${ctx.dataset.label}: ${formatLabel(ctx.parsed.y)}` },
             },
           },
           scales: {
             x: {
-              grid: { color: colors.grid },
-              ticks: { color: colors.label, font: { size: 12, family: 'Inter' } },
-              border: { color: colors.grid },
+              grid: { color: getColors().grid },
+              ticks: { color: getColors().label, font: { size: 12, family: 'Inter' } },
+              border: { color: getColors().grid },
             },
             y: {
-              grid: { color: colors.grid },
-              ticks: {
-                color: colors.label,
-                font: { size: 12, family: 'Inter' },
-                callback: (val) => formatLabel(val),
-              },
-              border: { color: colors.grid },
+              grid: { color: getColors().grid },
+              ticks: { color: getColors().label, font: { size: 12, family: 'Inter' }, callback: formatLabel },
+              border: { color: getColors().grid },
             },
           },
         },
       });
     }
 
-    // Create chart when in view
     const chartObserver = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
         createChart();
@@ -407,28 +497,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     chartObserver.observe(canvas);
 
-    // Rebuild chart on theme change (observe attribute)
-    new MutationObserver(() => {
-      if (chart) createChart();
-    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    new MutationObserver(() => { if (chart) createChart(); })
+      .observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
-    // Legend
     const legendEl = document.getElementById('chart-legend');
-    cd.datasets.forEach(ds => {
-      const item = document.createElement('div');
-      item.className = 'chart-legend-item';
-      item.innerHTML = `<div class="chart-legend-dot" style="background:${ds.color}"></div>${ds.label}`;
-      legendEl.appendChild(item);
-    });
+    if (legendEl) {
+      cd.datasets.forEach(ds => {
+        const item = document.createElement('div');
+        item.className = 'chart-legend-item';
+        item.innerHTML = `<div class="chart-legend-dot" style="background:${ds.color}"></div>${ds.label}`;
+        legendEl.appendChild(item);
+      });
+    }
   }
 
   buildChart();
 
-  // ── 10. BUILD AUDIENCE ───────────────────────────────────
+  // ── 11. BUILD AUDIENCE ───────────────────────────────────
   function buildAudience() {
     const interestsEl = document.getElementById('audience-interests');
     if (!interestsEl) return;
-
     C.audience.interests.forEach(interest => {
       const tag = document.createElement('span');
       tag.className = 'interest-tag';
@@ -439,7 +527,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   buildAudience();
 
-  // ── 11. BUILD CONTENT SHOWCASE ───────────────────────────
+  // ── 12. BUILD CONTENT SHOWCASE ───────────────────────────
   function buildContent() {
     const grid = document.getElementById('content-grid');
     if (!grid) return;
@@ -480,7 +568,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   buildContent();
 
-  // ── 12. BUILD CHARACTERS ─────────────────────────────────
+  // ── 13. BUILD CHARACTERS ─────────────────────────────────
   function buildCharacters() {
     const grid = document.getElementById('characters-grid');
     if (!grid) return;
@@ -514,7 +602,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   buildCharacters();
 
-  // ── 13. BUILD ADVERTISING FORMATS ───────────────────────
+  // ── 14. BUILD ADVERTISING FORMATS ───────────────────────
   function getAdIcon(icon) {
     const icons = {
       integration: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>`,
@@ -557,7 +645,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   buildAdvertising();
 
-  // ── 14. BUILD BRANDS ─────────────────────────────────────
+  // ── 15. BUILD BRANDS ─────────────────────────────────────
   function buildBrands() {
     const grid = document.getElementById('brands-grid');
     if (!grid) return;
@@ -588,14 +676,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   buildBrands();
 
-  // ── 15. BUILD CONTACT CTA ────────────────────────────────
+  // ── 16. BUILD CONTACT CTA ────────────────────────────────
   function buildContact() {
     const actionsEl = document.getElementById('contact-actions');
     if (!actionsEl) return;
 
     const { contact } = C;
 
-    // WhatsApp
     if (contact.whatsapp) {
       const btn = document.createElement('a');
       btn.href = `https://wa.me/${contact.whatsapp}`;
@@ -606,48 +693,51 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.553 4.122 1.523 5.853L.057 23.18a.75.75 0 0 0 .917.912l5.42-1.449A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75c-1.97 0-3.808-.56-5.366-1.529l-.383-.232-3.973 1.062 1.08-3.864-.251-.398A9.708 9.708 0 0 1 2.25 12 9.75 9.75 0 0 1 12 2.25 9.75 9.75 0 0 1 21.75 12 9.75 9.75 0 0 1 12 21.75z"/></svg>WhatsApp`;
       actionsEl.appendChild(btn);
     } else {
+      // Botão padrão quando sem contato configurado
       const btn = document.createElement('a');
       btn.href = '#';
       btn.className = 'btn btn-primary btn-lg';
-      btn.setAttribute('aria-label', 'Falar sobre uma campanha');
       btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Falar Sobre uma Campanha`;
       actionsEl.appendChild(btn);
     }
 
-    // Email
     if (contact.email) {
       const btn = document.createElement('a');
       btn.href = `mailto:${contact.email}`;
       btn.className = 'btn btn-secondary btn-lg';
-      btn.setAttribute('aria-label', 'Enviar e-mail');
       btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>E-mail`;
       actionsEl.appendChild(btn);
     }
 
-    // Instagram
     if (contact.instagram) {
       const btn = document.createElement('a');
       btn.href = contact.instagram;
       btn.target = '_blank';
       btn.rel = 'noopener noreferrer';
       btn.className = 'btn btn-ghost btn-lg';
-      btn.setAttribute('aria-label', 'Instagram');
-      btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>Instagram`;
+      btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>Instagram`;
       actionsEl.appendChild(btn);
     }
 
-    // Se nenhum contato foi configurado
+    if (contact.kwai) {
+      const btn = document.createElement('a');
+      btn.href = contact.kwai;
+      btn.target = '_blank';
+      btn.rel = 'noopener noreferrer';
+      btn.className = 'btn btn-ghost btn-lg';
+      btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1 14H9V8h2v8zm4.5-8l-3.5 4 3.5 4h-2.5L10 14.5V13l2.5-3H16.5z"/></svg>Kwai`;
+      actionsEl.appendChild(btn);
+    }
+
     if (!contact.whatsapp && !contact.email && !contact.instagram) {
       const note = document.getElementById('contact-disclaimer');
-      if (note) {
-        note.textContent = 'Informações de contato em breve.';
-      }
+      if (note) note.textContent = 'Informações de contato em breve.';
     }
   }
 
   buildContact();
 
-  // ── 16. FADE IN HERO ON LOAD ─────────────────────────────
+  // ── 17. FADE IN HERO ON LOAD ─────────────────────────────
   document.querySelectorAll('.hero-content > *').forEach((el, i) => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(20px)';
@@ -658,9 +748,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
   });
 
-  // Hero image float cards counters
+  // Registrar float cards no counter observer
   document.querySelectorAll('.hero-float-card [data-counter]').forEach(el => {
     counterObserver.observe(el);
   });
+
+  // Ocultar float-4 (Kwai) se valor for 0 e não houver backend
+  const floatKwai = document.querySelector('.hero-float-4');
+  if (floatKwai && C.stats.kwaiFollowers.value === 0 && !C.metricsApiUrl) {
+    floatKwai.style.display = 'none';
+  }
 
 });

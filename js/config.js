@@ -1,16 +1,32 @@
 /**
  * ============================================================
- * WIRIS VIANA — CONFIGURAÇÃO CENTRAL DE DADOS
+ * WIRIS VIANA — CONFIGURAÇÃO CENTRAL DE DADOS (v2)
  * ============================================================
  * INSTRUÇÃO: Altere os valores neste arquivo para atualizar
  * todos os componentes do site automaticamente.
  *
  * Valores marcados com [PLACEHOLDER] devem ser substituídos
  * pelos dados reais quando disponíveis.
+ *
+ * MÉTRICAS AO VIVO:
+ * Se o servidor backend estiver rodando (server/), os valores
+ * de seguidores serão buscados automaticamente de lá.
+ * Configure METRICS_API_URL abaixo.
  * ============================================================
  */
 
 window.WV_CONFIG = {
+
+  // ── BACKEND DE MÉTRICAS ──────────────────────────────────
+  // URL do servidor de métricas (server/index.js)
+  // null = usa apenas os valores estáticos de stats abaixo
+  // 'http://localhost:3001' = busca do servidor local
+  metricsApiUrl: 'http://localhost:3001', // Conecta ao backend local quando ativo; fallback automático se offline
+
+  // Intervalo de atualização das métricas no frontend (em ms)
+  // O frontend consulta o backend a cada X ms para atualizar os contadores
+  // Padrão: 5 minutos (300000 ms)
+  metricsRefreshInterval: 300000,
 
   // ── IDENTIDADE ──────────────────────────────────────────
   creator: {
@@ -29,10 +45,13 @@ window.WV_CONFIG = {
     instagram: null,          // ex: 'https://instagram.com/wirisviana'
     youtubeChannel: null,     // ex: 'https://youtube.com/@wirisviana'
     tiktok: null,             // ex: 'https://tiktok.com/@wirisviana'
+    kwai: null,               // ex: 'https://www.kwai.com/@wirisviana'
   },
 
   // ── MÉTRICAS PRINCIPAIS ──────────────────────────────────
-  // [PLACEHOLDER] Substitua pelos dados reais do creator
+  // [PLACEHOLDER] Valores usados quando o backend não está disponível.
+  // Quando metricsApiUrl estiver configurado, os valores de seguidores
+  // vêm do backend e estes são usados apenas como fallback inicial.
   stats: {
     // TikTok
     tiktokFollowers:     { value: 78421,    label: 'Seguidores TikTok',    suffix: '',   prefix: '' },
@@ -45,6 +64,10 @@ window.WV_CONFIG = {
     // YouTube
     youtubeSubscribers:  { value: 12800,    label: 'Inscritos YouTube',    suffix: '',   prefix: '' },
     youtubeViews:        { value: 4100000,  label: 'Views YouTube',        suffix: '+',  prefix: '' },
+
+    // Kwai
+    kwaiFollowers:       { value: 0,        label: 'Seguidores Kwai',      suffix: '',   prefix: '' }, // [PLACEHOLDER]
+    kwaiViews:           { value: 0,        label: 'Views Kwai',           suffix: '+',  prefix: '' }, // [PLACEHOLDER]
 
     // Gerais
     totalFollowers:      { value: 136421,   label: 'Seguidores Totais',    suffix: '+',  prefix: '' },
@@ -62,7 +85,7 @@ window.WV_CONFIG = {
       name: 'TikTok',
       color: '#FF0050',
       icon: 'tiktok',
-      followers: 78421,
+      followers: 78421,          // Sincronizado com backend quando disponível
       followersLabel: 'Seguidores',
       views: '32.8M+',
       viewsLabel: 'Visualizações',
@@ -105,6 +128,22 @@ window.WV_CONFIG = {
       contentType: 'Séries, episódios completos, vlogs',
       url: null, // [PLACEHOLDER]
     },
+    {
+      id: 'kwai',
+      name: 'Kwai',
+      color: '#FF6900',
+      icon: 'kwai',
+      followers: 0,              // [PLACEHOLDER] — será sincronizado com backend
+      followersLabel: 'Seguidores',
+      views: '[Em breve]',       // [PLACEHOLDER]
+      viewsLabel: 'Visualizações',
+      engagement: '[Em breve]',  // [PLACEHOLDER]
+      engagementLabel: 'Engajamento',
+      growth: '[Em breve]',      // [PLACEHOLDER]
+      growthLabel: 'Crescimento Mensal',
+      contentType: 'Conteúdo de entretenimento e web-novelas',
+      url: null, // [PLACEHOLDER]
+    },
   ],
 
   // ── DADOS DO GRÁFICO DE CRESCIMENTO ─────────────────────
@@ -130,16 +169,11 @@ window.WV_CONFIG = {
   // ── AUDIÊNCIA ────────────────────────────────────────────
   // [PLACEHOLDER] Substitua pelos dados reais de audiência
   audience: {
-    ageGroups: [
-      // { label: '13-17', percentage: 0, label_display: '[PLACEHOLDER]' },
-      // { label: '18-24', percentage: 0, label_display: '[PLACEHOLDER]' },
-      // { label: '25-34', percentage: 0, label_display: '[PLACEHOLDER]' },
-      // { label: '35+',   percentage: 0, label_display: '[PLACEHOLDER]' },
-    ],
-    genderSplit: null,  // [PLACEHOLDER] ex: { female: 62, male: 38 }
-    topStates: [],      // [PLACEHOLDER] ex: ['SP', 'RJ', 'MG']
-    topCountries: [],   // [PLACEHOLDER] ex: ['Brasil 87%', 'Portugal 6%']
-    interests: [        // Baseado no tipo de conteúdo — pode ser editado
+    ageGroups: [],      // [PLACEHOLDER]
+    genderSplit: null,  // [PLACEHOLDER]
+    topStates: [],      // [PLACEHOLDER]
+    topCountries: [],   // [PLACEHOLDER]
+    interests: [
       'Entretenimento',
       'Drama',
       'Web-novelas',
@@ -154,33 +188,33 @@ window.WV_CONFIG = {
   content: [
     {
       id: 'serie-1',
-      title: '[Nome da Série]',       // [PLACEHOLDER]
+      title: '[Nome da Série]',
       type: 'Web-novela',
-      episodes: 0,                    // [PLACEHOLDER]
-      views: '0',                     // [PLACEHOLDER]
-      thumbnail: null,                // [PLACEHOLDER] path para imagem
-      description: '[Descrição da série]', // [PLACEHOLDER]
+      episodes: 0,
+      views: '0',
+      thumbnail: null,
+      description: '[Descrição da série]',
       platform: 'TikTok',
     },
     {
       id: 'serie-2',
-      title: '[Nome da Série 2]',     // [PLACEHOLDER]
+      title: '[Nome da Série 2]',
       type: 'Série',
-      episodes: 0,                    // [PLACEHOLDER]
-      views: '0',                     // [PLACEHOLDER]
-      thumbnail: null,                // [PLACEHOLDER]
-      description: '[Descrição da série]', // [PLACEHOLDER]
+      episodes: 0,
+      views: '0',
+      thumbnail: null,
+      description: '[Descrição da série]',
       platform: 'YouTube',
     },
     {
       id: 'serie-3',
-      title: '[Nome da Produção]',    // [PLACEHOLDER]
+      title: '[Nome da Produção]',
       type: 'Conteúdo Especial',
-      episodes: 0,                    // [PLACEHOLDER]
-      views: '0',                     // [PLACEHOLDER]
-      thumbnail: null,                // [PLACEHOLDER]
-      description: '[Descrição]',     // [PLACEHOLDER]
-      platform: 'Instagram',
+      episodes: 0,
+      views: '0',
+      thumbnail: null,
+      description: '[Descrição]',
+      platform: 'Kwai',
     },
   ],
 
@@ -189,24 +223,24 @@ window.WV_CONFIG = {
   characters: [
     {
       id: 'char-1',
-      name: '[Nome do Personagem]',   // [PLACEHOLDER]
-      photo: null,                    // [PLACEHOLDER]
-      description: '[Descrição do personagem e sua participação no universo Wiris]', // [PLACEHOLDER]
-      appearances: 0,                 // [PLACEHOLDER]
+      name: '[Nome do Personagem]',
+      photo: null,
+      description: '[Descrição do personagem e sua participação no universo Wiris]',
+      appearances: 0,
     },
     {
       id: 'char-2',
-      name: '[Nome do Personagem 2]', // [PLACEHOLDER]
-      photo: null,                    // [PLACEHOLDER]
-      description: '[Descrição]',     // [PLACEHOLDER]
-      appearances: 0,                 // [PLACEHOLDER]
+      name: '[Nome do Personagem 2]',
+      photo: null,
+      description: '[Descrição]',
+      appearances: 0,
     },
     {
       id: 'char-3',
-      name: '[Nome do Personagem 3]', // [PLACEHOLDER]
-      photo: null,                    // [PLACEHOLDER]
-      description: '[Descrição]',     // [PLACEHOLDER]
-      appearances: 0,                 // [PLACEHOLDER]
+      name: '[Nome do Personagem 3]',
+      photo: null,
+      description: '[Descrição]',
+      appearances: 0,
     },
   ],
 
@@ -223,7 +257,7 @@ window.WV_CONFIG = {
         'Produto ou serviço aparece no universo dos personagens',
         'Alto índice de recall por contexto emocional',
       ],
-      platforms: ['TikTok', 'YouTube', 'Instagram'],
+      platforms: ['TikTok', 'YouTube', 'Instagram', 'Kwai'],
       formats: ['Vídeo vertical', 'Episódio', 'Série'],
     },
     {
@@ -237,7 +271,7 @@ window.WV_CONFIG = {
         'Integração nas gravações de bastidores',
         'Aparição em múltiplos episódios',
       ],
-      platforms: ['TikTok', 'YouTube'],
+      platforms: ['TikTok', 'YouTube', 'Kwai'],
       formats: ['Cena', 'Bastidores', 'Episódio'],
     },
     {
@@ -251,8 +285,8 @@ window.WV_CONFIG = {
         'Roteiro e direção criativa do Wiris',
         'Entrega em múltiplos formatos',
       ],
-      platforms: ['TikTok', 'Instagram', 'YouTube'],
-      formats: ['Reels', 'Shorts', 'TikTok', 'Post'],
+      platforms: ['TikTok', 'Instagram', 'YouTube', 'Kwai'],
+      formats: ['Reels', 'Shorts', 'TikTok', 'Kwai'],
     },
     {
       id: 'mencao',
@@ -265,7 +299,7 @@ window.WV_CONFIG = {
         'Alto índice de conversão',
         'Formato curto e direto',
       ],
-      platforms: ['TikTok', 'Instagram', 'YouTube'],
+      platforms: ['TikTok', 'Instagram', 'YouTube', 'Kwai'],
       formats: ['Stories', 'Live', 'Vídeo'],
     },
     {
@@ -279,7 +313,7 @@ window.WV_CONFIG = {
         'Múltiplos formatos e plataformas',
         'Relatório de resultados',
       ],
-      platforms: ['TikTok', 'Instagram', 'YouTube'],
+      platforms: ['TikTok', 'Instagram', 'YouTube', 'Kwai'],
       formats: ['Campanha', 'Série', 'Especial'],
     },
     {
@@ -301,22 +335,23 @@ window.WV_CONFIG = {
   // ── MARCAS PARCEIRAS ─────────────────────────────────────
   // [PLACEHOLDER] Adicione as marcas reais quando disponíveis
   brands: [
-    { id: 'brand-1', name: '[Marca Parceira]',   logo: null, campaign: null, result: null },
-    { id: 'brand-2', name: '[Marca Parceira]',   logo: null, campaign: null, result: null },
-    { id: 'brand-3', name: '[Marca Parceira]',   logo: null, campaign: null, result: null },
-    { id: 'brand-4', name: '[Marca Parceira]',   logo: null, campaign: null, result: null },
-    { id: 'brand-5', name: '[Marca Parceira]',   logo: null, campaign: null, result: null },
-    { id: 'brand-6', name: '[Marca Parceira]',   logo: null, campaign: null, result: null },
+    { id: 'brand-1', name: '[Marca Parceira]', logo: null, campaign: null, result: null },
+    { id: 'brand-2', name: '[Marca Parceira]', logo: null, campaign: null, result: null },
+    { id: 'brand-3', name: '[Marca Parceira]', logo: null, campaign: null, result: null },
+    { id: 'brand-4', name: '[Marca Parceira]', logo: null, campaign: null, result: null },
+    { id: 'brand-5', name: '[Marca Parceira]', logo: null, campaign: null, result: null },
+    { id: 'brand-6', name: '[Marca Parceira]', logo: null, campaign: null, result: null },
   ],
 
   // ── NAVEGAÇÃO ────────────────────────────────────────────
+  // Ordem oficial — não alterar sem atualizar os IDs das sections no HTML
   nav: [
-    { label: 'Início',       href: '#hero' },
-    { label: 'Audiência',    href: '#audiencia' },
-    { label: 'Conteúdo',     href: '#conteudo' },
-    { label: 'Publicidade',  href: '#publicidade' },
-    { label: 'Bastidores',   href: '#bastidores' },
-    { label: 'Contato',      href: '#contato' },
+    { label: 'Início',      href: '#inicio' },
+    { label: 'Audiência',   href: '#audiencia' },
+    { label: 'Conteúdo',    href: '#conteudo' },
+    { label: 'Publicidade', href: '#publicidade' },
+    { label: 'Bastidores',  href: '#bastidores' },
+    { label: 'Contato',     href: '#contato' },
   ],
 
 };
