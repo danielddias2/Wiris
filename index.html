@@ -6,7 +6,7 @@
 
   <!-- ── SEO ─────────────────────────────────────────── -->
   <title>Wiris Viana — Creator & Media</title>
-  <meta name="description" content="Wiris Viana é um criador de conteúdo com mais de 136 mil seguidores e 41 milhões de visualizações mensais. Conheça os formatos de publicidade e parcerias comerciais disponíveis para marcas.">
+  <meta name="description" content="Wiris Viana é um criador de conteúdo com mais de 136 mil seguidores e 41 milhões de visualizações mensais no TikTok, Instagram, YouTube e Kwai. Conheça os formatos de publicidade e parcerias comerciais.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://wirisviana.com/">
 
@@ -45,26 +45,21 @@
 
 <body>
 
-  <!-- Scroll progress -->
+  <!-- Scroll progress indicator -->
   <div id="scroll-progress" aria-hidden="true" role="progressbar" aria-label="Progresso de leitura"></div>
 
-  <!-- Live ticker -->
-  <div id="live-ticker" aria-hidden="true" role="marquee">
-    <div class="ticker-track" id="ticker-track"></div>
-  </div>
-
-  <!-- Skip to main -->
-  <a href="#main-content" id="skip-main" class="sr-only" style="position:fixed;top:-100%;left:1rem;z-index:9999;background:var(--accent);color:#fff;padding:0.5rem 1rem;border-radius:4px;font-weight:600;transition:top 0.2s" onFocus="this.style.top='0.5rem'" onBlur="this.style.top='-100%'">Ir para o conteúdo</a>
+  <!-- Skip to main content (acessibilidade) -->
+  <a href="#main-content" id="skip-main" class="sr-only" style="position:fixed;top:-100%;left:1rem;z-index:9999;background:var(--accent);color:#fff;padding:0.5rem 1rem;border-radius:4px;font-weight:600;transition:top 0.2s" onfocus="this.style.top='0.5rem'" onblur="this.style.top='-100%'">Ir para o conteúdo</a>
 
   <!-- ══════════════════════════════════════════════════════
-       NAVBAR
+       NAVBAR (position: fixed, z-index: 1000)
   ══════════════════════════════════════════════════════ -->
   <header role="banner">
     <nav id="navbar" aria-label="Navegação principal">
       <div class="nav-inner">
 
         <!-- Logo -->
-        <a href="#hero" class="nav-logo" aria-label="Wiris Viana — Página inicial">
+        <a href="#inicio" class="nav-logo" aria-label="Wiris Viana — Página inicial">
           <span class="nav-logo-name">Wiris Viana</span>
           <span class="nav-logo-sub">Creator & Media</span>
         </a>
@@ -80,11 +75,9 @@
             aria-label="Alternar tema escuro/claro"
             title="Alternar tema"
           >
-            <!-- Moon (shown in dark mode) -->
             <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
             </svg>
-            <!-- Sun (shown in light mode) -->
             <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <circle cx="12" cy="12" r="5"/>
               <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
@@ -98,7 +91,6 @@
             Quero Anunciar
           </a>
 
-          <!-- Mobile toggle -->
           <button
             id="nav-mobile-toggle"
             class="nav-mobile-toggle"
@@ -121,12 +113,24 @@
     </nav>
   </header>
 
+  <!-- ══════════════════════════════════════════════════════
+       LIVE TICKER
+       Separado da navbar com margin-top: 64px (altura do nav)
+  ══════════════════════════════════════════════════════ -->
+  <div id="live-ticker" aria-hidden="true" role="marquee" style="margin-top: 76px;">
+    <div class="ticker-track" id="ticker-track"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       MAIN CONTENT
+  ══════════════════════════════════════════════════════ -->
   <main id="main-content">
 
     <!-- ══════════════════════════════════════════════════
-         HERO
+         SEÇÃO 1: INÍCIO — #inicio
+         (antiga #hero, renomeada para corresponder ao nav)
     ══════════════════════════════════════════════════ -->
-    <section id="hero" aria-label="Apresentação">
+    <section id="inicio" aria-label="Apresentação">
       <div class="hero-bg-grid" aria-hidden="true"></div>
       <div class="hero-bg-radial" aria-hidden="true"></div>
 
@@ -135,13 +139,11 @@
         <!-- Left: Content -->
         <div class="hero-content">
 
-          <!-- Badge -->
           <div class="hero-badge" aria-label="Parceiro para marcas">
             <span class="dot" aria-hidden="true"></span>
             Disponível para Parcerias
           </div>
 
-          <!-- Title -->
           <div class="hero-title">
             <h1 class="hero-title-name">Wiris<br>Viana</h1>
             <p class="hero-title-sub">
@@ -150,10 +152,11 @@
           </div>
 
           <!-- Mini Stats (preenchidas via JS) -->
-          <div class="hero-mini-stats" id="hero-mini-stats" aria-label="Métricas principais">
-          </div>
+          <div class="hero-mini-stats" id="hero-mini-stats" aria-label="Métricas principais"></div>
 
-          <!-- CTA -->
+          <!-- Timestamp de atualização (preenchido via JS quando usando backend) -->
+          <div id="metrics-timestamp" class="metrics-timestamp" style="display:none"></div>
+
           <div class="hero-actions">
             <a href="#contato" class="btn btn-primary btn-lg" aria-label="Quero anunciar com Wiris Viana">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -166,12 +169,16 @@
             </a>
           </div>
 
-        </div>
+        </div><!-- /hero-content -->
 
-        <!-- Right: Photo -->
+        <!-- Right: Photo + Float Cards
+             IMPORTANTE: os float cards estão FORA do hero-image-bg
+             para não sofrerem clipping pelo overflow:hidden da imagem.
+        -->
         <div class="hero-image-wrap" aria-hidden="true">
+
+          <!-- Imagem de fundo (overflow:hidden aplicado apenas aqui) -->
           <div class="hero-image-bg">
-            <!-- Substituir src pela foto real do Wiris -->
             <div class="hero-photo-placeholder">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
                 <circle cx="12" cy="8" r="5"/>
@@ -179,36 +186,42 @@
               </svg>
               <p>Foto principal do Wiris</p>
             </div>
+            <!-- Para ativar: descomente a linha abaixo e remova o placeholder acima -->
             <!-- <img src="assets/images/wiris-hero.jpg" alt="Wiris Viana" class="hero-photo"> -->
           </div>
 
-          <!-- Float cards -->
+          <!-- Float Cards: posicionados em relação ao hero-image-wrap,
+               MAS fora do hero-image-bg para evitar overflow clipping.
+               overflow: visible garantido no hero-image-wrap via CSS. -->
           <div class="hero-float-card hero-float-1">
-            <div class="hero-float-card-icon" style="background:rgba(255,0,80,0.12);color:#FF0050;">
+            <div class="hero-float-card-icon" style="background:rgba(255,0,80,0.15);color:#FF0050;">
+              <!-- TikTok icon -->
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.95a8.28 8.28 0 0 0 4.84 1.54V7.07a4.85 4.85 0 0 1-1.07-.38z"/>
               </svg>
             </div>
             <div>
-              <div class="hero-float-card-value" data-counter data-target="78421" data-suffix="">0</div>
+              <div class="hero-float-card-value" id="float-tiktok" data-counter data-target="78421" data-suffix="">0</div>
               <div class="hero-float-card-label">TikTok Seguidores</div>
             </div>
           </div>
 
           <div class="hero-float-card hero-float-2">
-            <div class="hero-float-card-icon" style="background:rgba(255,0,0,0.12);color:#FF0000;">
+            <div class="hero-float-card-icon" style="background:rgba(255,0,0,0.15);color:#FF0000;">
+              <!-- YouTube icon -->
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
               </svg>
             </div>
             <div>
-              <div class="hero-float-card-value" data-counter data-target="12800" data-suffix="">0</div>
+              <div class="hero-float-card-value" id="float-youtube" data-counter data-target="12800" data-suffix="">0</div>
               <div class="hero-float-card-label">YouTube Inscritos</div>
             </div>
           </div>
 
           <div class="hero-float-card hero-float-3">
-            <div class="hero-float-card-icon" style="background:rgba(225,48,108,0.12);color:#E1306C;">
+            <div class="hero-float-card-icon" style="background:rgba(225,48,108,0.15);color:#E1306C;">
+              <!-- Instagram icon -->
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                 <rect x="2" y="2" width="20" height="20" rx="5"/>
                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
@@ -216,8 +229,22 @@
               </svg>
             </div>
             <div>
-              <div class="hero-float-card-value" data-counter data-target="45200" data-suffix="">0</div>
+              <div class="hero-float-card-value" id="float-instagram" data-counter data-target="45200" data-suffix="">0</div>
               <div class="hero-float-card-label">Instagram Seguidores</div>
+            </div>
+          </div>
+
+          <!-- Float card Kwai (visível apenas em desktop amplo) -->
+          <div class="hero-float-card hero-float-4">
+            <div class="hero-float-card-icon" style="background:rgba(255,105,0,0.15);color:#FF6900;">
+              <!-- Kwai icon (stylized K) -->
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1 14H9V8h2v8zm4.5-8l-3.5 4 3.5 4h-2.5L10 14.5V13l2.5-3H16.5z"/>
+              </svg>
+            </div>
+            <div>
+              <div class="hero-float-card-value" id="float-kwai" data-counter data-target="0" data-suffix="">—</div>
+              <div class="hero-float-card-label">Kwai Seguidores</div>
             </div>
           </div>
 
@@ -231,11 +258,9 @@
         <span>Scroll</span>
       </div>
 
-    </section>
+    </section><!-- /#inicio -->
 
-    <!-- ══════════════════════════════════════════════════
-         STATS
-    ══════════════════════════════════════════════════ -->
+    <!-- Stats (subsection do Início, sem nav anchor próprio) -->
     <section id="stats" aria-label="Métricas de audiência">
       <div class="container">
         <div class="stats-grid" id="stats-grid" role="list">
@@ -244,9 +269,7 @@
       </div>
     </section>
 
-    <!-- ══════════════════════════════════════════════════
-         PLATFORMS
-    ══════════════════════════════════════════════════ -->
+    <!-- Plataformas (subsection antes da Audiência) -->
     <section id="plataformas" class="section" aria-label="Presença digital por plataforma">
       <div class="container">
         <header class="section-header">
@@ -255,7 +278,7 @@
             Uma audiência construída<br>em múltiplas plataformas.
           </h2>
           <p class="reveal reveal-delay-2">
-            Conteúdo distribuído estrategicamente onde a audiência está — com formatos nativos e linguagem própria em cada plataforma.
+            Conteúdo distribuído estrategicamente onde a audiência está — com formatos nativos e linguagem própria em TikTok, Instagram, YouTube e Kwai.
           </p>
         </header>
 
@@ -273,9 +296,7 @@
       </div>
     </section>
 
-    <!-- ══════════════════════════════════════════════════
-         GROWTH CHART
-    ══════════════════════════════════════════════════ -->
+    <!-- Crescimento (subsection) -->
     <section id="crescimento" aria-label="Crescimento de audiência">
       <div class="container">
         <header class="section-header reveal">
@@ -289,9 +310,7 @@
               <div class="chart-title">Crescimento de Visualizações</div>
               <div class="chart-subtitle">Últimos 6 meses — todas as plataformas</div>
             </div>
-            <div class="chart-legend" id="chart-legend" aria-label="Legenda do gráfico">
-              <!-- preenchido via JS -->
-            </div>
+            <div class="chart-legend" id="chart-legend" aria-label="Legenda do gráfico"></div>
           </div>
 
           <div class="chart-canvas-wrap">
@@ -306,23 +325,21 @@
     </section>
 
     <!-- ══════════════════════════════════════════════════
-         AUDIENCE
+         SEÇÃO 2: AUDIÊNCIA — #audiencia
     ══════════════════════════════════════════════════ -->
     <section id="audiencia" class="section" aria-label="Perfil da audiência">
       <div class="container">
         <div class="audience-grid">
 
-          <!-- Left: Context -->
           <div class="audience-content">
             <div class="label-eyebrow reveal">A Audiência</div>
             <h2 class="display-md reveal reveal-delay-1">
               Pessoas reais.<br>Atenção genuína.
             </h2>
             <p class="reveal reveal-delay-2">
-              Por trás dos números existe uma comunidade engajada que acompanha o universo de Wiris ativamente, interage com o conteúdo e responde às recomendações de marcas com alto índice de conversão.
+              Por trás dos números existe uma comunidade engajada que acompanha o universo de Wiris ativamente, interage com o conteúdo e responde às recomendações de marcas com alto índice de conversão — em TikTok, Instagram, YouTube e Kwai.
             </p>
 
-            <!-- Interests -->
             <div>
               <div class="label-eyebrow reveal reveal-delay-3" style="margin-bottom:1rem">Interesses da Audiência</div>
               <div class="audience-interests" id="audience-interests" aria-label="Interesses da audiência">
@@ -330,13 +347,11 @@
               </div>
             </div>
 
-            <!-- Placeholder note -->
             <div class="audience-placeholder-note reveal reveal-delay-4">
               📊 Dados demográficos detalhados disponíveis mediante solicitação comercial.
             </div>
           </div>
 
-          <!-- Right: Stats grid -->
           <div class="audience-stats-grid reveal-right reveal-delay-2" aria-label="Números da audiência">
 
             <div class="audience-stat-cell">
@@ -344,7 +359,7 @@
                 <span data-counter data-target="136421" data-suffix="+">0+</span>
               </div>
               <div class="audience-stat-label">Seguidores Totais</div>
-              <div class="audience-stat-note">Todas as plataformas</div>
+              <div class="audience-stat-note">TikTok + Instagram + YouTube + Kwai</div>
             </div>
 
             <div class="audience-stat-cell">
@@ -375,10 +390,10 @@
 
         </div>
       </div>
-    </section>
+    </section><!-- /#audiencia -->
 
     <!-- ══════════════════════════════════════════════════
-         CONTENT SHOWCASE
+         SEÇÃO 3: CONTEÚDO — #conteudo
     ══════════════════════════════════════════════════ -->
     <section id="conteudo" aria-label="Universo de conteúdo">
       <div class="container" style="padding-top:6rem;padding-bottom:6rem">
@@ -388,7 +403,7 @@
             Produção, não apenas postagem.
           </h2>
           <p class="reveal reveal-delay-2">
-            Web-novelas, séries, personagens e narrativas que constroem comunidade e geram atenção de forma consistente — um universo de entretenimento de verdade.
+            Web-novelas, séries, personagens e narrativas que constroem comunidade e geram atenção de forma consistente — em TikTok, YouTube, Instagram e Kwai.
           </p>
         </header>
 
@@ -396,14 +411,83 @@
           <!-- preenchido via JS -->
         </div>
       </div>
+    </section><!-- /#conteudo -->
+
+    <!-- Personagens (subsection de Conteúdo) -->
+    <section id="personagens" class="section" aria-label="Personagens do universo Wiris Viana" style="background:var(--bg-primary);">
+      <div class="container">
+        <header class="section-header">
+          <div class="label-eyebrow reveal">O Universo</div>
+          <h2 class="display-md reveal reveal-delay-1">
+            Personagens que a audiência<br>conhece e acompanha.
+          </h2>
+          <p class="reveal reveal-delay-2">
+            Um elenco recorrente que constrói identificação e fideliza a audiência ao longo das temporadas.
+          </p>
+        </header>
+
+        <div class="characters-grid" id="characters-grid" role="list">
+          <!-- preenchido via JS -->
+        </div>
+      </div>
     </section>
 
     <!-- ══════════════════════════════════════════════════
-         BEHIND THE SCENES
+         SEÇÃO 4: PUBLICIDADE — #publicidade
+         (movida para ANTES de #bastidores conforme briefing)
+    ══════════════════════════════════════════════════ -->
+    <section id="publicidade" aria-label="Formatos de publicidade disponíveis">
+      <div class="container" style="padding-top:6rem;padding-bottom:6rem">
+        <div class="advertising-intro">
+          <div class="label-eyebrow reveal">Para Marcas</div>
+          <h2 class="display-md reveal reveal-delay-1">
+            Formas da sua marca<br>entrar nesse universo.
+          </h2>
+          <p class="reveal reveal-delay-2">
+            Cada formato foi pensado para integrar a mensagem da sua marca de maneira autêntica dentro do conteúdo que a audiência de Wiris já consome — em TikTok, Instagram, YouTube e Kwai.
+          </p>
+        </div>
+
+        <div class="advertising-grid" id="advertising-grid" role="list">
+          <!-- preenchido via JS -->
+        </div>
+
+        <div class="advertising-cta-strip reveal reveal-delay-2" id="advertising-cta-strip">
+          <!-- preenchido via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Marcas (subsection de Publicidade) -->
+    <section id="marcas" class="section" aria-label="Marcas parceiras" style="background:var(--bg-primary);">
+      <div class="container">
+        <header class="section-header">
+          <div class="label-eyebrow reveal">Marcas Parceiras</div>
+          <h2 class="display-md reveal reveal-delay-1">
+            Marcas que já fizeram<br>parte dessa história.
+          </h2>
+          <p class="reveal reveal-delay-2">
+            Empresas que escolheram o universo de Wiris para ampliar sua presença junto a uma audiência engajada.
+          </p>
+        </header>
+
+        <div class="brands-grid reveal reveal-delay-2" id="brands-grid" role="list">
+          <!-- preenchido via JS -->
+        </div>
+
+        <p class="brands-cta reveal reveal-delay-3">
+          Logos e cases detalhados disponíveis mediante solicitação comercial.
+        </p>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════════════
+         SEÇÃO 5: BASTIDORES — #bastidores
+         (agora DEPOIS de publicidade, conforme briefing)
     ══════════════════════════════════════════════════ -->
     <section id="bastidores" aria-label="Por trás das câmeras">
       <div class="bts-image-wrap">
-        <!-- Substituir src pela foto de bastidores -->
+        <!-- Placeholder até ter foto real -->
         <div class="bts-placeholder" role="img" aria-label="Foto de bastidores da produção de Wiris Viana">
           <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.75" opacity="0.2" aria-hidden="true">
             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
@@ -411,6 +495,7 @@
           </svg>
           <p style="font-size:0.75rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted)">Foto de bastidores em breve</p>
         </div>
+        <!-- Para ativar: descomente e remova o placeholder acima -->
         <!-- <img src="assets/images/wiris-bastidores.jpg" alt="Equipe de produção de Wiris Viana nos bastidores" class="bts-image"> -->
 
         <div class="bts-overlay" aria-hidden="true"></div>
@@ -468,7 +553,6 @@
           </div>
         </div>
 
-        <!-- Floating indicators -->
         <div class="bts-indicators" aria-hidden="true">
           <div class="bts-indicator">
             <div class="bts-indicator-dot"></div>
@@ -484,88 +568,15 @@
           </div>
         </div>
 
-        <!-- Stats strip at bottom -->
         <div class="bts-stat-strip" id="bts-stat-strip" aria-label="Números de produção">
           <!-- preenchido via JS -->
         </div>
 
       </div>
-    </section>
+    </section><!-- /#bastidores -->
 
     <!-- ══════════════════════════════════════════════════
-         CHARACTERS
-    ══════════════════════════════════════════════════ -->
-    <section id="personagens" class="section" aria-label="Personagens do universo Wiris Viana">
-      <div class="container">
-        <header class="section-header">
-          <div class="label-eyebrow reveal">O Universo</div>
-          <h2 class="display-md reveal reveal-delay-1">
-            Personagens que a audiência<br>conhece e acompanha.
-          </h2>
-          <p class="reveal reveal-delay-2">
-            Um elenco recorrente que constrói identificação e fideliza a audiência ao longo das temporadas.
-          </p>
-        </header>
-
-        <div class="characters-grid" id="characters-grid" role="list">
-          <!-- preenchido via JS -->
-        </div>
-      </div>
-    </section>
-
-    <!-- ══════════════════════════════════════════════════
-         ADVERTISING FORMATS
-    ══════════════════════════════════════════════════ -->
-    <section id="publicidade" aria-label="Formatos de publicidade disponíveis">
-      <div class="container" style="padding-top:6rem;padding-bottom:6rem">
-        <div class="advertising-intro">
-          <div class="label-eyebrow reveal">Para Marcas</div>
-          <h2 class="display-md reveal reveal-delay-1">
-            Formas da sua marca<br>entrar nesse universo.
-          </h2>
-          <p class="reveal reveal-delay-2">
-            Cada formato foi pensado para integrar a mensagem da sua marca de maneira autêntica e eficiente dentro do conteúdo que a audiência de Wiris já consome e ama.
-          </p>
-        </div>
-
-        <div class="advertising-grid" id="advertising-grid" role="list">
-          <!-- preenchido via JS -->
-        </div>
-
-        <!-- CTA Strip -->
-        <div class="advertising-cta-strip reveal reveal-delay-2" id="advertising-cta-strip">
-          <!-- preenchido via JS -->
-        </div>
-      </div>
-    </section>
-
-    <!-- ══════════════════════════════════════════════════
-         BRAND CASES
-    ══════════════════════════════════════════════════ -->
-    <section id="marcas" class="section" aria-label="Marcas parceiras">
-      <div class="container">
-        <header class="section-header">
-          <div class="label-eyebrow reveal">Marcas Parceiras</div>
-          <h2 class="display-md reveal reveal-delay-1">
-            Marcas que já fizeram<br>parte dessa história.
-          </h2>
-          <p class="reveal reveal-delay-2">
-            Empresas que escolheram o universo de Wiris para ampliar sua presença junto a uma audiência engajada.
-          </p>
-        </header>
-
-        <div class="brands-grid reveal reveal-delay-2" id="brands-grid" role="list">
-          <!-- preenchido via JS -->
-        </div>
-
-        <p class="brands-cta reveal reveal-delay-3">
-          Logos e cases detalhados disponíveis mediante solicitação comercial.
-        </p>
-      </div>
-    </section>
-
-    <!-- ══════════════════════════════════════════════════
-         CONTACT CTA
+         SEÇÃO 6: CONTATO — #contato
     ══════════════════════════════════════════════════ -->
     <section id="contato" aria-label="Contato comercial">
       <div class="contact-bg-grid" aria-hidden="true"></div>
@@ -581,7 +592,7 @@
           </h2>
 
           <p class="contact-sub reveal reveal-delay-2">
-            Seja uma integração pontual ou uma campanha de longo prazo, estamos prontos para construir algo que funcione de verdade para a sua marca e para nossa audiência.
+            Seja uma integração pontual ou uma campanha de longo prazo, estamos prontos para construir algo que funcione de verdade para a sua marca e para nossa audiência — em TikTok, Instagram, YouTube e Kwai.
           </p>
 
           <div class="contact-actions reveal reveal-delay-3" id="contact-actions">
@@ -594,7 +605,7 @@
 
         </div>
       </div>
-    </section>
+    </section><!-- /#contato -->
 
   </main><!-- /main -->
 
@@ -607,7 +618,7 @@
 
         <div class="footer-logo">
           <span class="footer-logo-name">Wiris Viana</span>
-          <span class="footer-logo-sub">Creator & Media</span>
+          <span class="footer-logo-sub">Creator & Media · TikTok · Instagram · YouTube · Kwai</span>
         </div>
 
         <nav class="footer-nav" aria-label="Links do rodapé">
@@ -632,7 +643,6 @@
   <script src="js/main.js"></script>
   <script src="js/enhancements.js"></script>
   <script>
-    // Dynamic year
     document.getElementById('footer-year').textContent = new Date().getFullYear();
   </script>
 
