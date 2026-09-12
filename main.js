@@ -811,3 +811,114 @@ document.addEventListener('DOMContentLoaded', () => {
   observer.observe(document.body, { childList: true, subtree: true });
 })();
 
+
+
+/* ============================================================
+   STABLE_COUNTER_MASK_V2
+   Counter animation is treated as a masked visual layer.
+   The surrounding layout never gets to resize because of the
+   changing digits. No section/grid positioning is changed.
+   ============================================================ */
+(function () {
+  const STYLE_ID = 'stable-counter-mask-style';
+
+  function installStyle() {
+    if (document.getElementById(STYLE_ID)) return;
+    const style = document.createElement('style');
+    style.id = STYLE_ID;
+    style.textContent = `
+      [data-counter] {
+        display: inline-block !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        box-sizing: border-box !important;
+        flex: 0 0 auto !important;
+        font-variant-numeric: tabular-nums !important;
+        font-feature-settings: "tnum" !important;
+        contain: layout paint !important;
+      }
+      [data-counter].counter-mask-ready {
+        min-width: var(--counter-fixed-width) !important;
+        width: var(--counter-fixed-width) !important;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function measureFinalWidth(el) {
+    const target = el.getAttribute('data-target');
+    if (target == null || target === '') return;
+
+    const suffix = el.getAttribute('data-suffix') || '';
+    const current = el.textContent;
+
+    const probe = document.createElement('span');
+    const cs = getComputedStyle(el);
+
+    probe.textContent = String(target) + suffix;
+    probe.style.cssText = [
+      'position:fixed',
+      'left:-100000px',
+      'top:-100000px',
+      'visibility:hidden',
+      'white-space:nowrap',
+      'display:inline-block',
+      'box-sizing:border-box',
+      `font:${cs.font}`,
+      `font-size:${cs.fontSize}`,
+      `font-family:${cs.fontFamily}`,
+      `font-weight:${cs.fontWeight}`,
+      `letter-spacing:${cs.letterSpacing}`,
+      `font-variant-numeric:tabular-nums`,
+      `font-feature-settings:"tnum"`,
+      `padding:${cs.padding}`,
+      `border:${cs.border}`
+    ].join(';');
+
+    document.body.appendChild(probe);
+    const width = Math.ceil(probe.getBoundingClientRect().width);
+    probe.remove();
+
+    if (width > 0) {
+      el.style.setProperty('--counter-fixed-width', width + 'px');
+      el.classList.add('counter-mask-ready');
+    } else if (current) {
+      el.classList.add('counter-mask-ready');
+    }
+  }
+
+  function stabilize() {
+    installStyle();
+    document.querySelectorAll('[data-counter]').forEach(el => {
+      if (!el.dataset.counterMaskV2) {
+        el.dataset.counterMaskV2 = '1';
+        measureFinalWidth(el);
+      }
+    });
+  }
+
+  function boot() {
+    stabilize();
+    requestAnimationFrame(stabilize);
+    setTimeout(stabilize, 250);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
+  } else {
+    boot();
+  }
+
+  // Counters/cards are populated dynamically by the existing site.
+  const observer = new MutationObserver(() => {
+    document.querySelectorAll('[data-counter]:not([data-counter-mask-v2])').forEach(el => {
+      el.dataset.counterMaskV2 = '1';
+      measureFinalWidth(el);
+    });
+  });
+
+  if (document.body) {
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+})();
+
